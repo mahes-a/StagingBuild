@@ -111,6 +111,22 @@ Overall, the integration of Llama-2-7b-chat model on Azure with Teams, along wit
 
      <img width="1169" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/33dd7224-cf94-4ec0-9287-b34c19f2e00a">
 
+- Run 3.1 and 3.2 to create a endpoint for the Llama-2-7b-chat , this would take few minutes
+
+  <img width="736" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/b0894558-35d6-4e29-b375-896248762550">
+
+- Deploy the Llama 2 model with the content safety resource to the endpoint created in previous steps , this would take several minutes , wait for completion 
+  
+    <img width="698" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/7230fa15-a23c-4577-81d0-5c7384ecf10e">
+
+- Once Successful , switch to the endpoints section and click on the Llama2 endpoint in the Real-time endpoint section
+
+    <img width="877" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/cfd87fef-ec4b-4c86-ac3c-a50f4c5b6564">
+
+    <img width="937" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/5ea8d98c-7891-48bc-837c-95317fee6867">
+
+
+ 
 - d
 - d
 
