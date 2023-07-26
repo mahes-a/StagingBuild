@@ -42,3 +42,7 @@ Overall, the integration of Llama-2-7b-chat model on Azure with Teams, along wit
 - Safe Prompts are sent to Llama-2-7b-chat model and response from Llama-2-7b-chat model is also monitored and validated by the Azure AI Content Safety resource
   
 - Safe Responses are sent back to Azure Bot via the Azure Machine learning real-time inference endopints
+
+## Steps
+
+**Create an Azure Machine learning real-time inference endopint that hosts Llama-2-7b-chat model with built in Azure AI Content Safety**
