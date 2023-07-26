@@ -126,7 +126,19 @@ Overall, the integration of Llama-2-7b-chat model on Azure with Teams, along wit
     <img width="937" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/5ea8d98c-7891-48bc-837c-95317fee6867">
 
 
- 
-- d
+- Lets select the test tab and provide a input json to test the Llama-2-7b-chat deployment
+
+   <img width="881" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/c62aa452-5c1f-4667-aa12-a0618c82c49d">
+
+- Sample inputs and ouputs are available in the Llama-2-7b-chat model page , to navigate to the model page select your workspace , Select "Model Catalog" menu from left and click on View models in Introducing Llama 2 section Choose Llama-2-7b-chat model 
+
+    <img width="563" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/52fefbac-d2e7-4e58-973a-124a95b1b2b1">
+
+   
+   
+- g
+- g
+- g
+- 
 - d
 
