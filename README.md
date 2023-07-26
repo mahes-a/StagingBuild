@@ -81,6 +81,8 @@ Overall, the integration of Llama-2-7b-chat model on Azure with Teams, along wit
 
      <img width="1019" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/6f7c1b10-1c54-46a4-bade-8b8a79d17e9d">
 
+ -  Choose your compute , either your pre-created conmpute instance or serverless if you dont have compute instance created
+
 -  Choose the model_name as "Llama-2-7b-chat" , update endpoint_name , deployment_name  if needed and  The sku_name would be the A100 or V100 GPU SKU , at present  it defaults to Standard_NC24s_v3 SKU and execute the notebook
 
 -  Uncomment and install dependencies
@@ -91,5 +93,24 @@ Overall, the integration of Llama-2-7b-chat model on Azure with Teams, along wit
 
     <img width="766" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/3c8fe189-5599-452f-a3b3-525e93f089e8">
 
--  Run the Get Credential section
+-  Enter your AML subscription_id , resource group and aml workspace name and execute
+
+   <img width="625" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/88be6260-acf2-4748-bec8-f5e33853da2f">
+
+   
+- Kindly go through the Note section to undesrtand the  region to deploy the Azure AI Content Safety and Choose the region for deploying the content safety resource according to your needs and compliance laws , The default choses "east us" , Please change according to your needs
+
+     <img width="994" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/e5a24d4f-3ec8-44e3-a182-274b8c24224e">
+
+- Create Azure content safety resource
+  
+    <img width="749" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/8f16e7bf-28f2-42f4-ae0f-7220e0841b68">
+
+    
+- Optional , You can search for the content safety resource in the Azure Portal
+
+     <img width="1169" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/33dd7224-cf94-4ec0-9287-b34c19f2e00a">
+
+- d
+- d
 
