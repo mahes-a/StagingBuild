@@ -45,7 +45,7 @@ Overall, the integration of Llama-2-7b-chat model on Azure with Teams, along wit
 
 ## Steps
 
-*As noted in the Prerequisites sections Deploying Llama 2 models requires GPU compute of V100 / A100 SKUs , Please ensure you have quota available* 
+*As noted in the Prerequisites sections Deploying Llama 2 models requires GPU compute of V100 / A100 SKUs , Please ensure you have quota available for v100 or A100* 
 
 **Create an Azure Machine learning real-time inference endopint that hosts Llama-2-7b-chat model with built in Azure AI Content Safety**
 
@@ -87,5 +87,9 @@ Overall, the integration of Llama-2-7b-chat model on Azure with Teams, along wit
 
     <img width="534" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/dc5bf161-2344-4dd2-88aa-4432d6b7562e">
 
--  
+-  Run the Get Credential section
+
+    <img width="766" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/3c8fe189-5599-452f-a3b3-525e93f089e8">
+
+-  Run the Get Credential section
 
