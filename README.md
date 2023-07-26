@@ -21,6 +21,8 @@ Overall, the integration of Llama-2-7b-chat model on Azure with Teams, along wit
 
 ## Things to Note 
 
+- The bot maintains conversation history to be passed to the model and ensures conversation history is mainatained only for configurable turns to prevent hitting token limits, the state management in the bot is a sample and may not be suited for Production workloads 
+
 - Please note that this tutorial is intended for explorative and illustrative purposes only. It is meant to inspire ideas and should not be taken as prescriptive advice. Any implementation of the techniques described in this tutorial as part of your application should be thoroughly validated and tested to ensure accuracy, validity, compatibility with your specific use case and technical environment.
 
 - Please be aware that the  prompt instructions shown are not intended to be a correct and complete representation of the prompts that should be used with your applications in production. They are provided for informational purposes only and may not be suitable for all use cases. It is important to carefully consider your specific requirements and design appropriate prompts that meet your users' needs and expectations.
