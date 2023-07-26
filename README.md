@@ -26,3 +26,17 @@ Overall, the integration of Llama-2-7b-chat model on Azure with Teams, along wit
 - Please be aware that the  prompt instructions shown are not intended to be a correct and complete representation of the prompts that should be used with your applications in production. They are provided for informational purposes only and may not be suitable for all use cases. It is important to carefully consider your specific requirements and design appropriate prompts that meet your users' needs and expectations.
 
 - While LLMs have tremendous potential across many industries and use cases, it is essential to ensure that they are built in a safe and responsible manner. This includes taking steps to mitigate potential risks and ensure that the model will not cause harm to users or result in reputational damage to organizations. It is important to carefully consider the ethical implications of LLMs and to develop appropriate safeguards to protect against potential harms.
+
+## Technical Flow
+
+- Azure Bot's Teams channel is enabled and deployed in Teams app. 
+  
+- The Teams channel Bot makes HTTP Post requests with user prompt history to the Azure Machine learning real-time inference endopints  
+  
+- Azure Machine learning real-time inference endopints hosts the Llama-2-7b-chat model with built in Azure AI Content Safety monitoring
+  
+- The User prompts are monitored , validated and filtered by  Azure AI Content Safety resource
+  
+- Safe Prompts are sent to Llama-2-7b-chat model and response from Llama-2-7b-chat model is also monitored and validated by the Azure AI Content Safety resource
+  
+- Safe Responses are sent back to Azure Bot via the Azure Machine learning real-time inference endopints
