@@ -130,15 +130,14 @@ Overall, the integration of Llama-2-7b-chat model on Azure with Teams, along wit
 
    <img width="881" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/c62aa452-5c1f-4667-aa12-a0618c82c49d">
 
-- Sample inputs and ouputs are available in the Llama-2-7b-chat model page , to navigate to the model page select your workspace , Select "Model Catalog" menu from left and click on View models in Introducing Llama 2 section Choose Llama-2-7b-chat model 
+- Optional Sample inputs and ouputs are available in the Llama-2-7b-chat model page , to navigate to the model page select your workspace , Select "Model Catalog" menu from left and click on View models in Introducing Llama 2 section Choose Llama-2-7b-chat model 
 
     <img width="563" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/52fefbac-d2e7-4e58-973a-124a95b1b2b1">
 
-   
-   
-- g
-- g
-- g
-- 
-- d
+  
+- In the endpoints section and click on the Llama2 endpoint in the Real-time endpoint section and select the Consume tab , Note down the Rest endpoint and Authentication key these will be used to make the request from the Bot
+ 
+    <img width="856" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/6132b03f-ea92-4145-963a-74160a358ff8">
 
+
+**Create an Azure Bot and make HTTP Post requests to real-time inference endopint that hosts Llama-2-7b-chat model with built in Azure AI Content Safety**
