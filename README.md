@@ -45,4 +45,47 @@ Overall, the integration of Llama-2-7b-chat model on Azure with Teams, along wit
 
 ## Steps
 
+*As noted in the Prerequisites sections Deploying Llama 2 models requires GPU compute of V100 / A100 SKUs , Please ensure you have quota available* 
+
 **Create an Azure Machine learning real-time inference endopint that hosts Llama-2-7b-chat model with built in Azure AI Content Safety**
+
+##### Deploying Llama-2-7b-chat model with Azure AI Content Safety
+
+- Login into your ML Studio [here](https://ml.azure.com/)
+
+   <img width="998" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/b905bda5-79df-41cf-b444-28beb0543953">
+
+- Select your workspace , Select "Model Catalog" menu from left and click on View models in Introducing Llama 2 section
+
+   <img width="1128" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/e443154b-f7aa-4852-adeb-59b9d92c5c83">
+
+- Choose Llama-2-7b-chat model 
+
+     <img width="1111" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/96b62efa-e9b5-42a4-a2f9-40997fcba1df">
+
+
+     <img width="563" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/67ed9385-7b78-4f12-bfb5-cb5b92768f63">
+
+-  Click on Deploy -> Real-time endpoint option and ensure you chose Enable Azure AI Content Safety (Recommended) option and click proceed. Multiple layers of safety mechanism are recommended for LLM's for Responsible AI 
+
+    <img width="512" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/c901f8ba-86cb-4ae9-9909-7e7eb3985e7b">
+
+    <img width="465" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/96d5e3a7-c7b5-41aa-941c-3cc4e2a70a21">
+
+    
+-  This will open a notebook
+
+     <img width="998" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/5d13e2f4-c2a0-4d80-85f8-da9a114b7b83">
+
+- Clone the notebook and open llama-safe-online-deployment.ipynb
+
+     <img width="1019" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/6f7c1b10-1c54-46a4-bade-8b8a79d17e9d">
+
+-  Choose the model_name as "Llama-2-7b-chat" , update endpoint_name , deployment_name  if needed and  The sku_name would be the A100 or V100 GPU SKU , at present  it defaults to Standard_NC24s_v3 SKU and execute the notebook
+
+-  Uncomment and install dependencies
+
+    <img width="534" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/dc5bf161-2344-4dd2-88aa-4432d6b7562e">
+
+-  
+
