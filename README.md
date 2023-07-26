@@ -85,6 +85,9 @@ Overall, the integration of Llama-2-7b-chat model on Azure with Teams, along wit
 
 -  Choose the model_name as "Llama-2-7b-chat" , update endpoint_name , deployment_name  if needed and  The sku_name would be the A100 or V100 GPU SKU , at present  it defaults to Standard_NC24s_v3 SKU and execute the notebook
 
+    <img width="554" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/355f73d1-3f0d-47b2-a301-910f558096a5">
+
+
 -  Uncomment and install dependencies
 
     <img width="534" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/dc5bf161-2344-4dd2-88aa-4432d6b7562e">
