@@ -12,6 +12,11 @@ Overall, the integration of Llama-2-7b-chat model on Azure with Teams, along wit
 
  <img width="917" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/9da4c54a-d58d-4637-bb31-a0889f5709bd">
 
+## Teams Screen Grab
+
+ ![image](https://github.com/mahes-a/StagingBuild/assets/120069348/8973b2b4-86fb-4e9e-986f-1f56a7df7376)
+
+
 ## Prerequisites
 
 - Azure subscription with Azure Machine Learning resource
@@ -394,3 +399,8 @@ Overall, the integration of Llama-2-7b-chat model on Azure with Teams, along wit
 
   <img width="496" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/55239ff9-df34-4fd8-8306-3c001c41fb74">
 
+### Publish the bot to Azure & Teams channel
+
+- Publish the Bot to Azure from bot composer [refer here](https://learn.microsoft.com/en-us/composer/how-to-publish-bot?tabs=v2x)
+
+- To Acess the bot in teams channel [refer here](https://techcommunity.microsoft.com/t5/modern-work-app-consult-blog/publish-bot-app-to-teams-channel-with-bot-framework-composer-and/ba-p/3341876)
