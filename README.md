@@ -143,7 +143,7 @@ Overall, the integration of Llama-2-7b-chat model on Azure with Teams, along wit
     <img width="563" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/52fefbac-d2e7-4e58-973a-124a95b1b2b1">
 
   
-- In the endpoints section and click on the Llama2 endpoint in the Real-time endpoint section and select the Consume tab , Note down the Rest endpoint and Authentication key these will be used to make the request from the Bot
+- In the endpoints section and click on the Llama2 endpoint in the Real-time endpoint section and select the Consume tab , Note down the Rest endpoint , deployment name and Authentication key these will be used to make the request from the Bot
  
     <img width="856" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/6132b03f-ea92-4145-963a-74160a358ff8">
 
