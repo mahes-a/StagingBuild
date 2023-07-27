@@ -386,6 +386,11 @@ Overall, the integration of Llama-2-7b-chat model on Azure with Teams, along wit
 
 
   
+- The bot composer code is complete , start the bot and test the setup by providing a question
 
 
-- 
+  <img width="979" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/c666245b-c36b-44f6-b85d-23c7f87ee4a9">
+  
+
+  <img width="496" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/55239ff9-df34-4fd8-8306-3c001c41fb74">
+
