@@ -148,7 +148,7 @@ Overall, the integration of Llama-2-7b-chat model on Azure with Teams, along wit
 
 - Below is the sample chat history that must be sent to the Llama-2-7b-chat model , In this tutorial we will see an sample approach to create this Json in Bot composer (approach not production scale) , as see below the user question followed by model answers needs to be maitained and passed back to model , the model understabds context based on the chat history  
              
-      
+- The system role/message is optional, but it's recommended to at least include a basic one to get the best results.     
      
        {
         "input_data": {
