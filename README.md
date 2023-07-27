@@ -285,7 +285,7 @@ Overall, the integration of Llama-2-7b-chat model on Azure with Teams, along wit
 
     <img width="497" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/eb6d0e82-e1d8-4b99-9d60-05d14187e25b">
 
-  *Please note the tutorial uses conversation memory scope throught the composer for simplicity and brevity , for your production use case ,use the most apt memory scope , refer [here](https://learn.microsoft.com/en-us/composer/concept-memory?tabs=v2x) for memory scopes and their usage , we follow to build a json using string manipulation for simplicity and we donot use any custom components*
+  *Please note the tutorial uses conversation memory scope throught the composer for simplicity and brevity , for your production use case ,use the most apt memory scope , refer [here](https://learn.microsoft.com/en-us/composer/concept-memory?tabs=v2x) for memory scopes and their usage , we build a json using string manipulations and array for simplicity and brevity and we donot use any custom components in this tutorial*
 
 - First step lets Create a Array property to hold user question and answers , coalesce to prevent errors on first time load
 
