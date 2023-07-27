@@ -280,7 +280,7 @@ Overall, the integration of Llama-2-7b-chat model on Azure with Teams, along wit
 
     <img width="497" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/eb6d0e82-e1d8-4b99-9d60-05d14187e25b">
 
-  *Please note the tutorial uses conversation memory scope throught the composer for simplicity and brevity , for your production use case ,use the most apt memory scope , refer [here](https://learn.microsoft.com/en-us/composer/concept-memory?tabs=v2x) for memory scopes and their usage*
+  *Please note the tutorial uses conversation memory scope throught the composer for simplicity and brevity , for your production use case ,use the most apt memory scope , refer [here](https://learn.microsoft.com/en-us/composer/concept-memory?tabs=v2x) for memory scopes and their usage , we follow to build a json using string manipulation for simplicity and we donot use any custom components*
 
 - First step lets Create a Array property to hold user question and answers , coalesce to prevent errors on first time load
 
@@ -350,6 +350,22 @@ Overall, the integration of Llama-2-7b-chat model on Azure with Teams, along wit
 
     <img width="1004" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/db830189-d17f-4f12-b0f9-84c93c002edb">
  
+  - Make an HTTP Post request by adding the send http request
+
+             POST
+             URL =settings.api.AML_Llama_Inference_Url
+             Body =conversation.context.inputjson
+             Headers
+             Authorization =concat('Bearer ',settings.api.AML_Llama_Inference_Key)
+             azureml-model-deployment =settings.api.AML_Llama_Deployment_Name
+             Result property conversation.context.api_response
+             content type application/json
+             Response type Json 
+
+  <img width="335" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/e43a4de0-2bd5-41ee-ae8b-7db975c03915">
+  
+
+   <img width="1009" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/3793a8a5-a56d-4c89-909a-fa68cfcff8ad">
 
   
 
