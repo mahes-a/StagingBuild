@@ -115,7 +115,7 @@ Overall, the integration of Llama-2-7b-chat model on Azure with Teams, along wit
     <img width="749" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/8f16e7bf-28f2-42f4-ae0f-7220e0841b68">
 
     
-- Optional , You can search for the content safety resource in the Azure Portal
+- Optional , You can validate the created resource by searching for the content safety resource in the Azure Portal
 
      <img width="1169" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/33dd7224-cf94-4ec0-9287-b34c19f2e00a">
 
