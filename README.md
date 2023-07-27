@@ -288,18 +288,33 @@ Overall, the integration of Llama-2-7b-chat model on Azure with Teams, along wit
 
     <img width="341" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/18159c3a-d5b9-4875-8928-20d66e933475">
     
-
-- Add the logic to remove the  oldest two messages in the chathistory array if the convesration history array contains more elements than our configured message count , this would prevent token limit errors , refer to section above to find details
+- Add the logic to remove the  oldest two messages in the chathistory array if the convesration history array contains more elements than our configured message count , this would prevent token limit errors , refer to section above to find details , this is done in create a condition -> if/else 
 
             =count(conversation.context.chathistory) > settings.api.Past_Message_Count 
              conversation.context.chathistory
              =subArray(conversation.context.chathistory, 2, count(conversation.context.chathistory))  
                
+  <img width="329" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/de492524-fae3-4f57-94ed-c05db0e4397d">
 
    <img width="379" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/2d2e0efd-2253-4d80-8071-8f604e6f5730">
 
-- 
-  
+- Add  set properties  to clean prompts  and build the  string in format of "role": "user", "content": "user prompt" , this is our first setp in building the json required
+
+          conversation.context.currquestmp
+          =replace(replace(replace(replace(turn.activity.text, ' \ ', '\\'), '"', '\"'), ' ', '\r'), ' ', '\n')
+
+          conversation.context.currques
+          =concat(' {"role": "user","content":  "', trim(conversation.context.currquestmp), '" }')
+
+   <img width="326" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/647d7fac-bbd9-4fac-8883-6b80915b6941">
+
+  - Add the (Push) the user question in the format  "role": "user", "content": "user prompt" into the chathistory array , this done in the edit array property
+ 
+    <img width="315" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/32630450-9014-4583-8cd8-d2286d1c23b4">
+ 
+
+     <img width="1000" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/6649fc71-f372-4902-ace3-e9891a4cab2b">
+
 
 
   
