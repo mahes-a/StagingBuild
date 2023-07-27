@@ -20,17 +20,17 @@ Overall, the integration of Llama-2-7b-chat model on Azure with Teams, along wit
 ## Prerequisites
 
 - Azure subscription with Azure Machine Learning resource
-- Deploying Llama 2 models requires GPU compute of V100 / A100 SKUs. You can view and request AzureML compute quota [here](https://ml.azure.com/quota).
+- Deploying Llama 2 models require GPU compute of V100 / A100 SKUs. You can view and request AzureML compute quota [here](https://ml.azure.com/quota).
 - Install Bot Composer [here](https://learn.microsoft.com/en-us/composer/install-composer?tabs=windows).
-- Teams for work or school , You can downlaod from [here](https://go.microsoft.com/fwlink/?linkid=2187327&Lmsrc=groupChatMarketingPageWeb&Cmpid=directDownloadWin64&clcid=0x409&culture=en-us&country=us)
+- Teams for work or school , You can download from [here](https://go.microsoft.com/fwlink/?linkid=2187327&Lmsrc=groupChatMarketingPageWeb&Cmpid=directDownloadWin64&clcid=0x409&culture=en-us&country=us)
 
 ## Things to Note 
 
-- The bot maintains conversation history to be passed to the model and ensures conversation history is mainatained only for configurable turns to prevent hitting token limits in its memory, the state management in the bot is a sample and may not be suited for Production workloads 
+- The bot maintains conversation history to be passed to the model and ensures conversation history is maintained only for configurable turns to prevent hitting token limits in its memory, the state management in the bot is a sample and may not be suited for Production workloads 
 
-- Please note that this tutorial is intended for explorative and illustrative purposes only. It is meant to inspire ideas and should not be taken as prescriptive advice. Any implementation of the techniques described in this tutorial as part of your application should be thoroughly validated and tested to ensure accuracy, validity, compatibility with your specific use case and technical environment.
+- Please note that this tutorial is intended for explorative and illustrative purposes only. It is meant to inspire ideas and should not be taken as prescriptive advice. Any implementation of the techniques described in this tutorial as part of your application should be thoroughly validated and evaluated to ensure accuracy, validity, compatibility with your specific use case and technical environment.
 
-- Please be aware that the  prompt instructions shown are not intended to be a correct and complete representation of the prompts that should be used with your applications in production. They are provided for informational purposes only and may not be suitable for all use cases. It is important to carefully consider your specific requirements and design appropriate prompts that meet your users' needs and expectations.
+- Please be aware that the prompt instructions shown are not intended to be a correct and complete representation of the prompts that should be used with your applications in production. They are provided for informational purposes only and may not be suitable for all use cases. It is important to carefully consider your specific requirements and design appropriate prompts that meet your users' needs and expectations.
 
 - While LLMs have tremendous potential across many industries and use cases, it is essential to ensure that they are built in a safe and responsible manner. This includes taking steps to mitigate potential risks and ensure that the model will not cause harm to users or result in reputational damage to organizations. It is important to carefully consider the ethical implications of LLMs and to develop appropriate safeguards to protect against potential harms.
 
@@ -38,21 +38,21 @@ Overall, the integration of Llama-2-7b-chat model on Azure with Teams, along wit
 
 - Azure Bot's Teams channel is enabled and deployed in Teams app. 
   
-- The Teams channel Bot makes HTTP Post requests with user prompt history to the Azure Machine learning real-time inference endopints  
+- The Teams channel Bot makes HTTP Post requests with user prompt history to the Azure Machine learning real-time inference endpoints  
   
-- Azure Machine learning real-time inference endopints hosts the Llama-2-7b-chat model with built in Azure AI Content Safety monitoring
+- Azure Machine learning real-time inference endpoints hosts the Llama-2-7b-chat model with built in Azure AI Content Safety monitoring
   
 - The User prompts are monitored , validated and filtered by  Azure AI Content Safety resource
   
 - Safe Prompts are sent to Llama-2-7b-chat model and response from Llama-2-7b-chat model is also monitored and validated by the Azure AI Content Safety resource
   
-- Safe Responses are sent back to Azure Bot via the Azure Machine learning real-time inference endopints
+- Safe Responses are sent back to Azure Bot via the Azure Machine learning real-time inference endpoints
 
 ## Steps
 
 *As noted in the Prerequisites sections Deploying Llama 2 models requires GPU compute of V100 / A100 SKUs , Please ensure you have quota available for v100 or A100* 
 
-**Create an Azure Machine learning real-time inference endopint that hosts Llama-2-7b-chat model with built in Azure AI Content Safety**
+**Create an Azure Machine learning real-time inference endpoint that hosts Llama-2-7b-chat model with built in Azure AI Content Safety**
 
 ##### Deploying Llama-2-7b-chat model with Azure AI Content Safety
 
@@ -86,7 +86,7 @@ Overall, the integration of Llama-2-7b-chat model on Azure with Teams, along wit
 
      <img width="1019" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/6f7c1b10-1c54-46a4-bade-8b8a79d17e9d">
 
- -  Choose your compute , either your pre-created conmpute instance or serverless if you dont have compute instance created
+ -  Choose your compute, either your pre-created compute instance or serverless if you don’t have compute instance created
 
 -  Choose the model_name as "Llama-2-7b-chat" , update endpoint_name , deployment_name  if needed and  The sku_name would be the A100 or V100 GPU SKU , at present  it defaults to Standard_NC24s_v3 SKU and execute the notebook
 
@@ -106,7 +106,7 @@ Overall, the integration of Llama-2-7b-chat model on Azure with Teams, along wit
    <img width="625" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/88be6260-acf2-4748-bec8-f5e33853da2f">
 
    
-- Kindly go through the Note section to undesrtand the  region to deploy the Azure AI Content Safety and Choose the region for deploying the content safety resource according to your needs and compliance laws , The default choses "east us" , Please change according to your needs
+- Kindly go through the Note section to understand the  region to deploy the Azure AI Content Safety and Choose the region for deploying the content safety resource according to your needs and compliance laws , The default choses "east us" , Please change according to your needs
 
      <img width="994" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/e5a24d4f-3ec8-44e3-a182-274b8c24224e">
 
@@ -134,11 +134,11 @@ Overall, the integration of Llama-2-7b-chat model on Azure with Teams, along wit
     <img width="937" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/5ea8d98c-7891-48bc-837c-95317fee6867">
 
 
-- Lets select the test tab and provide a input json to test the Llama-2-7b-chat deployment
+- Lets select the test tab and provide a input Json to test the Llama-2-7b-chat deployment
 
    <img width="881" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/c62aa452-5c1f-4667-aa12-a0618c82c49d">
 
-- Optional Sample inputs and ouputs are available in the Llama-2-7b-chat model page , to navigate to the model page select your workspace , Select "Model Catalog" menu from left and click on View models in Introducing Llama 2 section Choose Llama-2-7b-chat model 
+- Optional Sample inputs and outputs are available in the Llama-2-7b-chat model page , to navigate to the model page select your workspace , Select "Model Catalog" menu from left and click on View models in Introducing Llama 2 section Choose Llama-2-7b-chat model 
 
     <img width="563" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/52fefbac-d2e7-4e58-973a-124a95b1b2b1">
 
@@ -149,9 +149,9 @@ Overall, the integration of Llama-2-7b-chat model on Azure with Teams, along wit
 
 **How to work with the Llama-2-7b-chat deployment models**
 
-*Please be aware that the  prompt instructions shown are not intended to be a correct and complete representation of the prompts that should be used with your applications in production. They are provided for informational purposes only and may not be suitable for all use cases. It is important to carefully consider your specific requirements and design appropriate prompts that meet your users' needs and expectations.*
+*Please be aware that the prompt instructions shown are not intended to be a correct and complete representation of the prompts that should be used with your applications in production. They are provided for informational purposes only and may not be suitable for all use cases. It is important to carefully consider your specific requirements and design appropriate prompts that meet your users' needs and expectations.*
 
-- Below is the sample chat history that must be sent to the Llama-2-7b-chat model , In this tutorial we will see an sample approach to create this Json in Bot composer (approach not production scale) , as see below the user question followed by model answers needs to be maitained and passed back to model , the model understabds context based on the chat history  
+- Below is the sample chat history that must be sent to the Llama-2-7b-chat model , In this tutorial we will see an sample approach to create this Json in Bot composer (approach not production scale) , as see below the user question followed by model answers needs to be maintained and passed back to model , the model understands context based on the chat history  
              
 - The system role/message is optional, but it's recommended to at least include a basic one to get the best results.     
      
@@ -160,7 +160,7 @@ Overall, the integration of Llama-2-7b-chat model on Azure with Teams, along wit
           "input_string": [
             {
               "role": "system",
-              "content": "You are an AI assistant that helps people find information.You are friendly and concise and provide only short factual answers"
+              "content": "You are an AI assistant that helps people find information. You are friendly and concise and provide only short factual answers"
             },
             {
               "role": "user",
@@ -216,7 +216,7 @@ Overall, the integration of Llama-2-7b-chat model on Azure with Teams, along wit
           "input_string": [
             {
               "role": "system",
-              "content": "You are an AI assistant that helps people find information.You are friendly and concise and provide only short factual answers"
+              "content": "You are an AI assistant that helps people find information. You are friendly and concise and provide only short factual answers"
             },
             
             {
@@ -250,7 +250,7 @@ Overall, the integration of Llama-2-7b-chat model on Azure with Teams, along wit
         }
       }
   
-**Create an Azure Bot and make HTTP Post requests to real-time inference endopint that hosts Llama-2-7b-chat model with built in Azure AI Content Safety**
+**Create an Azure Bot and make HTTP Post requests to real-time inference endpoint that hosts Llama-2-7b-chat model with built in Azure AI Content Safety**
 
 - Open Bot Framework Composer , and create an Empty Bot and name it according to your needs and create the bot
 
@@ -260,7 +260,7 @@ Overall, the integration of Llama-2-7b-chat model on Azure with Teams, along wit
     <img width="754" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/c97f207c-f052-49a9-b2c7-b78134032d04">
 
 
-- From the bot project (not the root solution) add a trigger and add messgae recieved activity  , this can be optional and entire bot can be designed in the "Unknown Intent" trigger too
+- From the bot project (not the root solution) add a trigger and add message received activity  , this can be optional and entire bot can be designed in the "Unknown Intent" trigger too
 
   <img width="646" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/60e67404-9e5d-4a1a-b4bb-86534cc9320c">
   
@@ -274,7 +274,7 @@ Overall, the integration of Llama-2-7b-chat model on Azure with Teams, along wit
   
     <img width="1192" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/8f9fa79f-d64e-4bfc-8f1a-4e7bf75c0430">
 
-- Add an api section in the config and fill below parameters , the url , key and deployment name can be retreived from the consume section of AML deployment 
+- Add an api section in the config and fill below parameters , the URL , key and deployment name can be retrieved from the consume section of AML deployment 
 
        "api": {
         "AML_Llama_Inference_Url": "",
@@ -320,7 +320,7 @@ Overall, the integration of Llama-2-7b-chat model on Azure with Teams, along wit
 
      <img width="1000" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/6649fc71-f372-4902-ace3-e9891a4cab2b">
 
-  - Set properties from manage proprty menu to build the entire Json required to send to the model
+  - Set properties from manage property menu to build the entire Json required to send to the model
  
          The json should be of format
                      {
@@ -328,7 +328,7 @@ Overall, the integration of Llama-2-7b-chat model on Azure with Teams, along wit
            "input_string": [
            {
            "role": "system",
-           "content": "You are an AI assistant that helps people find information.You are friendly and concise and provide only short factual answers"
+           "content": "You are an AI assistant that helps people find information. You are friendly and concise and provide only short factual answers"
            },
            
            {
@@ -372,7 +372,7 @@ Overall, the integration of Llama-2-7b-chat model on Azure with Teams, along wit
 
    <img width="1009" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/3793a8a5-a56d-4c89-909a-fa68cfcff8ad">
 
-- Lets validate the response from AML endpoint using if/else and if response is valid then display the anser from the model , if error display generic error message
+- Lets validate the response from AML endpoint using if/else and if response is valid then display the answer from the model , if error display generic error message
 
              =conversation.context.api_response.statusCode==200
              ${conversation.context.api_response.content.output}
