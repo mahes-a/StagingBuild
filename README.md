@@ -350,7 +350,7 @@ Overall, the integration of Llama-2-7b-chat model on Azure with Teams, along wit
 
     <img width="1004" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/db830189-d17f-4f12-b0f9-84c93c002edb">
  
-  - Make an HTTP Post request by adding the send http request
+ - Make an HTTP Post request by adding the send http request
 
              POST
              URL =settings.api.AML_Llama_Inference_Url
@@ -367,7 +367,22 @@ Overall, the integration of Llama-2-7b-chat model on Azure with Teams, along wit
 
    <img width="1009" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/3793a8a5-a56d-4c89-909a-fa68cfcff8ad">
 
-  
+- Lets validate the response from AML endpoint using if/else and if response is valid then display the anser from the model , if error display generic error message
+
+             =conversation.context.api_response.statusCode==200
+             ${conversation.context.api_response.content.output}
+     
+
+   <img width="554" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/82fb18f8-77bb-4f15-9a8f-8dfe67218076">
+
+
+-  Now push the answer from LLM into the array in the required json array format
+
+              conversation.context.chathistory
+
+              =concat(' {"role": "assistant","content":  "', trim(replace(replace(replace(replace(conversation.context.api_response.content.output, ' \ ', '\\'), '"', '\"'), ' ', '\r'), ' ', '\n')), '" }')
+
+  <img width="521" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/06b780e6-66ae-4f79-97ef-21593cfa5e8c">
 
 
   
