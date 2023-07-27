@@ -246,3 +246,66 @@ Overall, the integration of Llama-2-7b-chat model on Azure with Teams, along wit
       }
   
 **Create an Azure Bot and make HTTP Post requests to real-time inference endopint that hosts Llama-2-7b-chat model with built in Azure AI Content Safety**
+
+- Open Bot Framework Composer , and create an Empty Bot and name it according to your needs and create the bot
+
+    <img width="985" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/f37bd7be-9831-4f84-a574-2d1d7bc9f969">
+
+
+    <img width="754" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/c97f207c-f052-49a9-b2c7-b78134032d04">
+
+
+- From the bot project (not the root solution) add a trigger and add messgae recieved activity  , this can be optional and entire bot can be designed in the "Unknown Intent" trigger too
+
+  <img width="646" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/60e67404-9e5d-4a1a-b4bb-86534cc9320c">
+  
+
+  <img width="368" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/39ca1e4d-cf97-40b2-9a15-87ad0d0bc84e">
+
+
+  <img width="821" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/b1d6ffb4-28a0-41f8-976b-c356e3d6338a">
+
+- Click open the configure icon and choose advanced settings view (json)
+  
+    <img width="1192" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/8f9fa79f-d64e-4bfc-8f1a-4e7bf75c0430">
+
+- Add an api section in the config and fill below parameters , the url , key and deployment name can be retreived from the consume section of AML deployment 
+
+       "api": {
+        "AML_Llama_Inference_Url": "",
+        "AML_Llama_Inference_Key": "",
+        "Past_Message_Count": 8,
+        "AML_Llama_Deployment_Name": ""
+      },
+
+    <img width="497" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/eb6d0e82-e1d8-4b99-9d60-05d14187e25b">
+
+  *Please note the tutorial uses conversation memory scope throught the composer for simplicity and brevity , for your production use case ,use the most apt memory scope , refer [here](https://learn.microsoft.com/en-us/composer/concept-memory?tabs=v2x) for memory scopes and their usage*
+
+- First step lets Create a Array property to hold user question and answers , coalesce to prevent errors on first time load
+
+     ``` conversation.context.chathistory = =coalesce(conversation.context.chathistory, [])```
+
+    <img width="341" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/18159c3a-d5b9-4875-8928-20d66e933475">
+    
+
+- Add the logic to remove the  oldest two messages in the chathistory array if the convesration history array contains more elements than our configured message count , this would prevent token limit errors , refer to section above to find details
+
+            =count(conversation.context.chathistory) > settings.api.Past_Message_Count 
+             conversation.context.chathistory
+             =subArray(conversation.context.chathistory, 2, count(conversation.context.chathistory))  
+               
+
+   <img width="379" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/2d2e0efd-2253-4d80-8071-8f604e6f5730">
+
+- 
+  
+
+
+  
+
+
+  
+
+
+- 
