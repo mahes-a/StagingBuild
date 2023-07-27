@@ -308,14 +308,48 @@ Overall, the integration of Llama-2-7b-chat model on Azure with Teams, along wit
 
    <img width="326" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/647d7fac-bbd9-4fac-8883-6b80915b6941">
 
-  - Add the (Push) the user question in the format  "role": "user", "content": "user prompt" into the chathistory array , this done in the edit array property
+  - Add the (Push) the user question in the format  "role": "user", "content": "user prompt" into the chathistory array , this done in the edit array property , we then add a send response with "Fetching Response" message 
  
     <img width="315" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/32630450-9014-4583-8cd8-d2286d1c23b4">
  
 
      <img width="1000" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/6649fc71-f372-4902-ace3-e9891a4cab2b">
 
+  - Set properties from manage proprty menu to build the entire Json required to send to the model
+ 
+         The json should be of format
+                     {
+           "input_data": {
+           "input_string": [
+           {
+           "role": "system",
+           "content": "You are an AI assistant that helps people find information.You are friendly and concise and provide only short factual answers"
+           },
+           
+           {
+           "role": "user",
+           "content": "What is the tallest building in the world?"
+           }
+           ],
+           "parameters": {
+           "max_length": 2048,
+           "temperature": 0.6,
+           "top_p": 0.9,
+           "do_sample": true,
+           "max_new_tokens": 256
+              }
+            }
+           }
 
+
+        conversation.context.prefix  ' { "input_data": { "input_string": [ {"role": "system","content": "You are an AI assistant that helps people find information.You are friendly and concise and provide only short factual answers"}, '
+ 
+         conversation.context.suffix  = '  ], "parameters": { "max_length": 3000, "temperature": 0.9, "top_p": 0.6, "do_sample": true, "max_new_tokens": 350 } } } '
+ 
+         conversation.context.inputjson =json(concat(conversation.context.prefix,join(conversation.context.chathistory, ','),conversation.context.suffix))
+
+    <img width="1004" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/db830189-d17f-4f12-b0f9-84c93c002edb">
+ 
 
   
 
