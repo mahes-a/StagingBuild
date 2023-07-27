@@ -80,7 +80,7 @@ Overall, the integration of Llama-2-7b-chat model on Azure with Teams, along wit
     
 -  This will open a notebook
 
-     <img width="998" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/5d13e2f4-c2a0-4d80-85f8-da9a114b7b83">
+     <img width="981" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/0ad10429-b803-4551-8bb2-62dcb4edee56">
 
 - Clone the notebook and open llama-safe-online-deployment.ipynb
 
