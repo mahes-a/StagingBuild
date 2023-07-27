@@ -293,7 +293,7 @@ Overall, the integration of Llama-2-7b-chat model on Azure with Teams, along wit
 
     <img width="341" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/18159c3a-d5b9-4875-8928-20d66e933475">
     
-- Add the logic to remove the  oldest two messages in the chathistory array if the convesration history array contains more elements than our configured message count , this would prevent token limit errors , refer to section above to find details , this is done in create a condition -> if/else 
+- Add the logic to remove the  oldest two messages in the chathistory array if the conversation history array contains more elements than our configured message count , this would prevent token limit errors , refer to section above to find details , this is done in create a condition -> if/else 
 
             =count(conversation.context.chathistory) > settings.api.Past_Message_Count 
              conversation.context.chathistory
