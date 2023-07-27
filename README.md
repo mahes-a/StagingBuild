@@ -404,3 +404,14 @@ Overall, the integration of Llama-2-7b-chat model on Azure with Teams, along wit
 - Publish the Bot to Azure from bot composer [refer here](https://learn.microsoft.com/en-us/composer/how-to-publish-bot?tabs=v2x)
 
 - To Acess the bot in teams channel [refer here](https://techcommunity.microsoft.com/t5/modern-work-app-consult-blog/publish-bot-app-to-teams-channel-with-bot-framework-composer-and/ba-p/3341876)
+
+### AI Content Safety monitoring from Content Safety studio 
+
+- To validate our AI content Safety , login into Content Safety Studio [here](https://contentsafety.cognitive.azure.com/monitor)
+  
+- Monitor the model traffic against content safety categories
+
+   <img width="1178" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/7f2556df-a423-4f95-8d18-e2bd829514d6">
+
+ 
+
