@@ -414,5 +414,8 @@ Overall, the integration of Llama-2-7b-chat model on Azure with Teams, along wit
    <img width="1178" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/7f2556df-a423-4f95-8d18-e2bd829514d6">
 
  
-### Note
-Please refer [here](https://github.com/microsoft/aoai-virtual-assistant/) for Microsoft open source Virtual Assistant Accelerator which provides entire bot composer solution for Azure Open AI connected Bot
+### Inspiration & References
+
+- Refer [here](https://techcommunity.microsoft.com/t5/ai-machine-learning-blog/introducing-llama-2-on-azure/ba-p/3881233) to know more about Llama 2 on Azure
+  
+- Please refer [here](https://github.com/microsoft/aoai-virtual-assistant/) for Microsoft open source Virtual Assistant Accelerator which provides entire bot composer solution for Azure Open AI connected Bot
