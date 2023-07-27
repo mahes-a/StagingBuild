@@ -142,5 +142,107 @@ Overall, the integration of Llama-2-7b-chat model on Azure with Teams, along wit
  
     <img width="856" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/6132b03f-ea92-4145-963a-74160a358ff8">
 
+**How to work with the Llama-2-7b-chat deployment models**
 
+*Please be aware that the  prompt instructions shown are not intended to be a correct and complete representation of the prompts that should be used with your applications in production. They are provided for informational purposes only and may not be suitable for all use cases. It is important to carefully consider your specific requirements and design appropriate prompts that meet your users' needs and expectations.*
+
+- Below is the sample chat history that must be sent to the Llama-2-7b-chat model , In this tutorial we will see an sample approach to create this Json in Bot composer (approach not production scale) , as see below the user question followed by model answers needs to be maitained and passed back to model , the model understabds context based on the chat history  
+             
+      
+     
+       {
+        "input_data": {
+          "input_string": [
+            {
+              "role": "system",
+              "content": "You are an AI assistant that helps people find information.You are friendly and concise and provide only short factual answers"
+            },
+            {
+              "role": "user",
+              "content": "I am going to Paris, what should I see?"
+            },
+            {
+              "role": "assistant",
+              "content": "Paris, the capital of France, is known for its stunning architecture, art museums, historical landmarks, and romantic atmosphere. Here are some of the top attractions to see in Paris:\n\n1. The Eiffel Tower: The iconic Eiffel Tower is one of the most recognizable landmarks in the world and offers breathtaking views of the city.\n2. The Louvre Museum: The Louvre is one of the world's largest and most famous museums, housing an impressive collection of art and artifacts, including the Mona Lisa.\n3. Notre-Dame Cathedral: This beautiful cathedral is one of the most famous landmarks in Paris and is known for its Gothic architecture and stunning stained glass windows.\n\nThese are just a few of the many attractions that Paris has to offer. With so much to see and do, it's no wonder that Paris is one of the most popular tourist destinations in the world."
+            },
+            {
+              "role": "user",
+              "content": "What is so great about #1?"
+            },
+            {
+              "role": "assistant",
+              "content": "The Eiffel Tower is considered one of the greatest engineering feats of the 19th century and is an iconic symbol of Paris and France. Here are some reasons why it's so great:\n\n1. Unique Design: The Eiffel Tower's unique design, with its lattice-like structure and iron beams, makes it a striking and recognizable landmark.\n2. Breathtaking Views: The Eiffel Tower offers panoramic views of the city of Paris and its surroundings, making it a popular spot for tourists and locals alike.\n3. Historical Significance: The Eiffel Tower was built for the 1889 World's Fair and was initially intended to be a temporary structure. However, it has become a permanent fixture in Paris and a symbol of French culture and engineering.\n4. "
+            },
+            {
+              "role": "user",
+              "content": "What is the tallest building in the world?"
+            },
+            {
+              "role": "assistant",
+              "content": "As of 2021, the Burj Khalifa in Dubai, United Arab Emirates is the tallest building in the world, standing at a height of 828 meters (2,722 feet). It was completed in 2010 and has 163 floors. The Burj Khalifa is not only the tallest building in the world but also holds several other records, such as the highest occupied floor, highest outdoor observation deck, elevator with the longest travel distance, and the tallest freestanding structure in the world."
+            },
+            {
+              "role": "user",
+              "content": "and in Africa?"
+            },
+            {
+              "role": "assistant",
+              "content": "In Africa, the tallest building is the Carlton Centre, located in Johannesburg, South Africa. It stands at a height of 50 floors and 223 meters (730 feet). The CarltonDefault Centre was completed in 1973 and was the tallest building in Africa for many years until the construction of the Leonardo, a 55-story skyscraper in Sandton, Johannesburg, which was completed in 2019 and stands at a height of 230 meters (755 feet). Other notable tall buildings in Africa include the Ponte City Apartments in Johannesburg, the John Hancock Center in Lagos, Nigeria, and the Alpha II Building in Abidjan, Ivory Coast"
+            },
+            {
+              "role": "user",
+              "content": "and in Europe?"
+            }
+          ],
+          "parameters": {
+            "max_length": 2048,
+            "temperature": 0.6,
+            "top_p": 0.9,
+            "do_sample": true,
+            "max_new_tokens": 256
+              }
+             }
+           }
+
+- If the conversation history is too long we would exceed the maximum token limit and would result in errors , In the bot composer we would remove the oldest User question and assitant answers whenever a configured threshold is reached , this would prevent us from hitting the token limit . After removing the oldest question and answers the above Json would look like below
+
+         {
+        "input_data": {
+          "input_string": [
+            {
+              "role": "system",
+              "content": "You are an AI assistant that helps people find information.You are friendly and concise and provide only short factual answers"
+            },
+            
+            {
+              "role": "user",
+              "content": "What is the tallest building in the world?"
+            },
+            {
+              "role": "assistant",
+              "content": "As of 2021, the Burj Khalifa in Dubai, United Arab Emirates is the tallest building in the world, standing at a height of 828 meters (2,722 feet). It was completed in 2010 and has 163 floors. The Burj Khalifa is not only the tallest building in the world but also holds several other records, such as the highest occupied floor, highest outdoor observation deck, elevator with the longest travel distance, and the tallest freestanding structure in the world."
+            },
+            {
+              "role": "user",
+              "content": "and in Africa?"
+            },
+            {
+              "role": "assistant",
+              "content": "In Africa, the tallest building is the Carlton Centre, located in Johannesburg, South Africa. It stands at a height of 50 floors and 223 meters (730 feet). The CarltonDefault Centre was completed in 1973 and was the tallest building in Africa for many years until the construction of the Leonardo, a 55-story skyscraper in Sandton, Johannesburg, which was completed in 2019 and stands at a height of 230 meters (755 feet). Other notable tall buildings in Africa include the Ponte City Apartments in Johannesburg, the John Hancock Center in Lagos, Nigeria, and the Alpha II Building in Abidjan, Ivory Coast"
+            },
+            {
+              "role": "user",
+              "content": "and in Europe?"
+            }
+          ],
+          "parameters": {
+            "max_length": 2048,
+            "temperature": 0.6,
+            "top_p": 0.9,
+            "do_sample": true,
+            "max_new_tokens": 256
+          }
+        }
+      }
+  
 **Create an Azure Bot and make HTTP Post requests to real-time inference endopint that hosts Llama-2-7b-chat model with built in Azure AI Content Safety**
