@@ -1,28 +1,44 @@
-# A Step-by-Step Guide to Build a Llama 2 on Azure powered Teams Chat Bot with built-in Azure AI Content Safety #
+# A Step-by-Step Guide to Build a Versatile Multi-Topic Digital Assistant Chatbot powered by Azure Open AI Function Calling #
 
-The Llama-2-7b-chat model on Azure powered chat bot, utilizing advanced language models, brings a range of capabilities to enhance communication and collaboration within Microsoft Teams. With its natural language processing abilities, Llama 2 chat models can understand and respond to user queries and requests, providing relevant information and assistance.
+A Multi-Topic Digital Assistant Chatbot is an intelligent conversational AI solution built to cater to diverse subject matters and assist users. By harnessing the capabilities of natural language processing and machine learning, it comprehends user queries and offers pertinent information or executes tasks accordingly. This advanced chatbot is designed to seamlessly understand and address a broad spectrum of topics, providing valuable assistance to users with accuracy and efficiency.
 
-By integrating Llama 2 chat models with Microsoft Teams, users can easily access the chat bot directly from their Teams interface. This means they can engage with LLM without leaving the Teams platform, saving time and effort. They can ask questions, seek guidance, or request information, and Llama will provide prompt and accurate responses, helping to streamline workflows and improve productivity.
-
-Additionally, the integration with Azure AI Content Safety ensures that conversations  remain secure and free from inappropriate or harmful content. This powerful combination ensures that users can communicate and collaborate with peace of mind, knowing that the Azure AI content safety is actively monitoring and filtering any potentially harmful or offensive content.
-
-Overall, the integration of Llama-2-7b-chat model on Azure with Teams, along with the inclusion of Azure AI Content Safety, creates a comprehensive solution that not only enhances productivity and collaboration but also prioritizes user safety and security. This makes it an ideal choice for businesses looking for efficient and secure communication tools to support their teams' workflows.
+Users  interact effortlessly through natural language input via Bot channels like Teams. The Function App acts as a bridge, connecting the Bot to Azure Open AI, sending functions and prompts. Azure Open AI processes user input , understands the user's query in depth, extracting the intended meaning and relevant details. This information is then used to provide specific function and parameters. The Function App executes the function, and the response is sent back to Azure Open AI. The Bot then delivers valuable insights and information to the user from the final response from Azure Open AI.
 
 ## High-level Architecture
 
- <img width="917" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/9da4c54a-d58d-4637-bb31-a0889f5709bd">
+ <img width="734" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/d790b4ad-dc05-4b31-85c4-cfd3dc9af48b">
+
+## High-level Flow
+
+The High level flow  involves the following steps:
+
+- Users input queries using natural language through Bot channels such as Teams.
+
+- The Bot communicates with a Function App, which then communicates with Azure Open AI with the available functions and user prompts.
+
+- Azure Open AI responds by providing the specific function to be executed, along with the parameters extracted from the user's input.
+
+- The Function App executes the function, and the response is sent back to Azure Open AI.
+
+- The Bot then responds to the user with the final natural language response received from Azure Open AI.
 
 ## Teams Screen Grab
 
- ![image](https://github.com/mahes-a/StagingBuild/assets/120069348/8973b2b4-86fb-4e9e-986f-1f56a7df7376)
+
+ 
+
+
 
 
 ## Prerequisites
 
-- Azure subscription with Azure Machine Learning resource
-- Deploying Llama 2 models require GPU compute of V100 / A100 SKUs. You can view and request AzureML compute quota [here](https://ml.azure.com/quota).
+- Azure subscription with access enabled for the Azure OpenAI service. You can request access [here](https://aka.ms/oaiapply). 
+- Visual Studio Code
 - Install Bot Composer [here](https://learn.microsoft.com/en-us/composer/install-composer?tabs=windows).
 - Teams for work or school , You can download from [here](https://go.microsoft.com/fwlink/?linkid=2187327&Lmsrc=groupChatMarketingPageWeb&Cmpid=directDownloadWin64&clcid=0x409&culture=en-us&country=us)
+- Bing search resource
+- Weather API from [here](https://rapidapi.com/apishub/api/yahoo-weather5)
+- Stock API from [here](https://rapidapi.com/alphavantage/api/alpha-vantage)
 
 ## Things to Note 
 
