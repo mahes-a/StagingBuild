@@ -21,6 +21,8 @@ The High level flow  involves the following steps:
 - The Function App executes the function, and the response is sent back to Azure Open AI.
 
 - The Bot then responds to the user with the final natural language response received from Azure Open AI.
+  
+
 
 ## Teams Screen Grab
 
@@ -39,30 +41,24 @@ The High level flow  involves the following steps:
 - Bing search resource
 - Weather API from [here](https://rapidapi.com/apishub/api/yahoo-weather5)
 - Stock API from [here](https://rapidapi.com/alphavantage/api/alpha-vantage)
+-  Car Sales dataset from [here](https://www.carpro.com/blog/full-year-2022-national-auto-sales-by-brand) in a CSV format
 
 ## Things to Note 
 
-- The bot maintains conversation history to be passed to the model and ensures conversation history is maintained only for pre-configured number of conversation turns to prevent hitting token limits in its memory, the state management in the bot is a sample and may not be suited for Production workloads 
+- When using function calling to integrate language models with other tools and systems, like any AI system, it is essential to acknowledge and address the potential risks involved. It is crucial to have a clear understanding of these risks and take appropriate measures to ensure responsible use of the capabilities. Refer [here](https://learn.microsoft.com/en-us/azure/ai-services/openai/how-to/function-calling#using-function-calling-responsibly) for responsible function calling
+  
+-  The bot maintains conversation history to be passed to the model and ensures conversation history is maintained only for pre-configured number of conversation turns to prevent hitting token limits in its memory, the state management in the bot is a sample and may not be suited for Production workloads 
 
 - Please note that this tutorial is intended for explorative and illustrative purposes only. It is meant to inspire ideas and should not be taken as prescriptive advice. Any implementation of the techniques described in this tutorial as part of your application should be thoroughly validated and evaluated to ensure accuracy, validity, compatibility with your specific use case and technical environment.
 
 - Please be aware that the prompt instructions shown are not intended to be a correct and complete representation of the prompts that should be used with your applications in production. They are provided for informational purposes only and may not be suitable for all use cases. It is important to carefully consider your specific requirements and design appropriate prompts that meet your users' needs and expectations.
 
 - While LLMs have tremendous potential across many industries and use cases, it is essential to ensure that they are built in a safe and responsible manner. This includes taking steps to mitigate potential risks and ensure that the model will not cause harm to users or result in reputational damage to organizations. It is important to carefully consider the ethical implications of LLMs and to develop appropriate safeguards to protect against potential harms.
+  
+- The tutorial uses developer free sample APIs as they are a convenient way to experiment and test integration with various services but  it is crucial to thoroughly validate and test the free sample API before integrating it into your application. This includes checking for error handling, response validation, and understanding any potential limitations or restrictions.
+  
+- There are no warranties of any kind, express or implied, about the completeness, accuracy, reliability, suitability or availability with respect to the information provided. 
 
-## Technical Flow
-
-- Azure Bot's Teams channel is enabled and deployed in Teams app. 
-  
-- The Teams channel Bot makes HTTP Post requests with user prompt history to the Azure Machine learning real-time inference endpoints  
-  
-- Azure Machine learning real-time inference endpoints hosts the Llama-2-7b-chat model with built in Azure AI Content Safety monitoring
-  
-- The User prompts are monitored , validated and filtered by  Azure AI Content Safety resource
-  
-- Safe Prompts are sent to Llama-2-7b-chat model and response from Llama-2-7b-chat model is also monitored and validated by the Azure AI Content Safety resource
-  
-- Safe Responses are sent back to Azure Bot via the Azure Machine learning real-time inference endpoints
 
 ## Steps
 
