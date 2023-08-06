@@ -122,6 +122,53 @@ The High level flow  involves the following steps:
     
     <img width="497" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/2f5fa787-8560-4e3d-b010-10323e7ecac7">
 
+  - Add the setup to Azure function code
+
+             import azure.functions as func
+             import logging
+             import openai
+             import json
+             import os
+             import pytz
+             from datetime import datetime
+             import math
+             import requests
+             import pandas as pd
+             import inspect
+             
+             #Setting up the deployment name
+             deployment_id = os.getenv("OPEN_AI_DEPLOYMENT")
+             
+             #This is set to `azure`
+             openai.api_type = "azure"
+             
+             #The API key for your Azure OpenAI resource.
+             openai.api_key = os.getenv("OPENAI_API_KEY")
+             
+             #The base URL for your Azure OpenAI resource. e.g. "https://<your resource name>.openai.azure.com"
+             openai.api_base = os.getenv("OPENAI_API_BASE")
+             
+             #Currently Chat Completion API have the following versions available: 2023-07-01-preview
+             openai.api_version = os.getenv("OPENAI_API_VERSION")
+             
+             #The Bing API key from Azure
+             subscription_key = os.getenv("bing_subscription_key")
+             
+             #The Bing Search key from Azure
+             search_url = os.getenv("bing_search_endpoint")
+             
+             #The vantage rapid api  key from Azure
+             vantage_key = os.getenv("vantage_key")
+             
+             #vantage api url
+             vantage_url = os.getenv("vantage_url")
+             
+             #The weather rapid api  key from Azure
+             weather_api_key = os.getenv("yahoo_weather_key")
+             
+             #vantage api url
+             weather_url = os.getenv("yahoo_weather_url")
+
 ##### Creating the API and arithmetic functions
 
 - In your function App add all the functions with API calls
