@@ -528,6 +528,10 @@ The High level flow  involves the following steps:
                         status_code=200
                    )
 
+- Note down the url of the function app either the Azure Deployed function url or the localhost url from VS code by using func host start in the terminal
+
+  <img width="572" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/5450c786-7bf5-463e-9943-238ab477e774">
+
 **How to work with the Azure Open AI chat Completion models**
 
 *Please be aware that the prompt instructions shown are not intended to be a correct and complete representation of the prompts that should be used with your applications in production. They are provided for informational purposes only and may not be suitable for all use cases. It is important to carefully consider your specific requirements and design appropriate prompts that meet your users' needs and expectations.*
@@ -617,7 +621,7 @@ The High level flow  involves the following steps:
                        }
                      ]
   
-**Create an Azure Bot and make HTTP Post requests to real-time inference endpoint that hosts Azure Open AI Chat model with built in Azure AI Content Safety**
+**Create an Azure Bot and make HTTP Post requests to the Function App**
 
 - Open Bot Framework Composer , and create an Empty Bot and name it according to your needs and create the bot
 
