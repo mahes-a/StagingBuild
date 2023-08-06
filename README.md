@@ -736,7 +736,7 @@ The High level flow  involves the following steps:
  
    
 
-- Lets validate the response from AML endpoint using if/else and if response is valid then display the answer from the model , if error display generic error message
+- Lets validate the response from Function endpoint using if/else and if response is valid then display the answer from the model , if error display generic error message
 
              =conversation.context.api_response.statusCode==200
              ${conversation.context.api_response.content.output}
