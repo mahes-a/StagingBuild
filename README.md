@@ -498,6 +498,36 @@ The High level flow  involves the following steps:
                    else :
                        return(response_message['content'])
 
+
+##### Function App HTTP trigger recieve User prompts and send responses via Azure Open AI 
+
+- Within your HTTP trigger method add below , the code responds only the response string from Azure Open AI
+
+             app = func.FunctionApp(http_auth_level=func.AuthLevel.FUNCTION)
+           
+           @app.route(route="YourAppRouteName")
+           def GetResponseFromAzureOpenAI(req: func.HttpRequest) -> func.HttpResponse:
+               logging.info('Python HTTP trigger function processed a request.')
+               req_body = req.get_json()
+               
+               #add validations
+               assistant_response = run_conversation(req_body, functions, available_functions, deployment_id)
+               content = ""  
+               if 'choices' in assistant_response and len(assistant_response['choices']) > 0:  
+                   first_choice = assistant_response['choices'][0]  
+                   if 'message' in first_choice and 'content' in first_choice['message']:  
+                       content = first_choice['message']['content']  
+               else:  
+                   content = assistant_response
+               
+               #print(assistant_response['choices'][0]['message'])
+               logging.info(content)
+               #content_string = assistant_response['choices'][0]['message']['content']
+               return func.HttpResponse(
+                        content,
+                        status_code=200
+                   )
+
 **How to work with the Llama-2-7b-chat deployment models**
 
 *Please be aware that the prompt instructions shown are not intended to be a correct and complete representation of the prompts that should be used with your applications in production. They are provided for informational purposes only and may not be suitable for all use cases. It is important to carefully consider your specific requirements and design appropriate prompts that meet your users' needs and expectations.*
