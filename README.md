@@ -501,7 +501,7 @@ The High level flow  involves the following steps:
 
 ##### Function App HTTP trigger recieve User prompts and send responses via Azure Open AI 
 
-- Within your HTTP trigger method add below , the code responds only the response string from Azure Open AI
+- Within your HTTP trigger method add below , the code responds only the response string from Azure Open AI , update route name @app.route(route="YourAppRouteName")
 
              app = func.FunctionApp(http_auth_level=func.AuthLevel.FUNCTION)
            
@@ -528,7 +528,7 @@ The High level flow  involves the following steps:
                         status_code=200
                    )
 
-**How to work with the Llama-2-7b-chat deployment models**
+**How to work with the Azure Open AI chat Completion models**
 
 *Please be aware that the prompt instructions shown are not intended to be a correct and complete representation of the prompts that should be used with your applications in production. They are provided for informational purposes only and may not be suitable for all use cases. It is important to carefully consider your specific requirements and design appropriate prompts that meet your users' needs and expectations.*
 
