@@ -770,8 +770,47 @@ The High level flow  involves the following steps:
 - To Acess the bot in teams channel [refer here](https://techcommunity.microsoft.com/t5/modern-work-app-consult-blog/publish-bot-app-to-teams-channel-with-bot-framework-composer-and/ba-p/3341876)
 
 
+## Testing  Azure Open AI Function Call
 
- 
+- Lets start testing by asking about car sales in the bot , As we see below the Azure Open AI determined the get_auto_sales_data as the recommended function and car brand name as a parameter from user prompt , the result from the function is Json Dictionary and Open AI converts the Json Dict result into natural langauge and answers back 
+
+Bot Response 
+
+<img width="1118" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/130653bf-1e58-4cf2-bf11-ba5be52ec33c">
+
+Function Call
+
+<img width="917" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/98d706c7-0684-4bdf-8b8e-60b5279a6054">
+
+- Lets continue testing by asking about the recent event and Azure open AI determines the bing seach function and responds based on bing search results with article url
+
+  <img width="1078" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/d900c53e-faeb-4e8f-ac00-9a9720b40af7">
+
+
+  <img width="920" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/2dbd2656-6570-469c-bc9b-208363b91b85">
+
+- Lets continue testing by asking about a stock result and also ask about the headquarter location of the stock. Azure Open AI calls the Get stock price function to get the current  price and generates the location 
+
+
+  <img width="1140" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/7fc0b8b7-b1a4-4e6f-bbe7-94e226ba4b0e">
+
+  <img width="770" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/fda62fbb-14ac-4c33-a107-c1403e159298">
+
+- Lets ask about the Time in the location from previous result , Azure open AI responds by calling the Get time function
+
+   <img width="1114" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/8b72df08-68f6-454b-aff1-b0db097eea35">
+
+
+   <img width="764" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/687bd7cf-051e-46d7-b637-40dae614931a">
+
+- Lets test by asking about weather and Azure Open AI calls getweather function and responds with weather
+
+  <img width="1111" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/72d2a135-9abe-46c6-b097-2868e45f4fee">
+
+  <img width="717" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/068e3313-f11d-4c36-a86b-d53ab907225a">
+
+
+
 ### Inspiration & References
   
 - Please refer [here](https://github.com/microsoft/aoai-virtual-assistant/) for Microsoft open source Virtual Assistant Accelerator which provides entire bot composer solution for Azure Open AI connected Bot
