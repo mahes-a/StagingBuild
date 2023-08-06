@@ -721,19 +721,20 @@ The High level flow  involves the following steps:
  - Make an HTTP Post request by adding the send http request
 
              POST
-             URL =settings.api.AML_Llama_Inference_Url
+             URL =settings.api.AOI_Function_Url
              Body =conversation.context.inputjson
-             Headers
-             Authorization =concat('Bearer ',settings.api.AML_Llama_Inference_Key)
-             azureml-model-deployment =settings.api.AML_Llama_Deployment_Name
+             
              Result property conversation.context.api_response
              content type application/json
              Response type Json 
 
   <img width="335" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/e43a4de0-2bd5-41ee-ae8b-7db975c03915">
   
+  
+  <img width="319" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/c5d9ed0d-c7aa-4c62-bc10-fe8a4227cbe9">
 
-   <img width="1009" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/3793a8a5-a56d-4c89-909a-fa68cfcff8ad">
+ 
+   
 
 - Lets validate the response from AML endpoint using if/else and if response is valid then display the answer from the model , if error display generic error message
 
@@ -768,17 +769,9 @@ The High level flow  involves the following steps:
 
 - To Acess the bot in teams channel [refer here](https://techcommunity.microsoft.com/t5/modern-work-app-consult-blog/publish-bot-app-to-teams-channel-with-bot-framework-composer-and/ba-p/3341876)
 
-### AI Content Safety monitoring from Content Safety studio 
 
-- To validate our AI content Safety , login into Content Safety Studio [here](https://contentsafety.cognitive.azure.com/monitor)
-  
-- Monitor the model traffic against content safety categories
-
-   <img width="1178" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/7f2556df-a423-4f95-8d18-e2bd829514d6">
 
  
 ### Inspiration & References
-
-- Refer [here](https://techcommunity.microsoft.com/t5/ai-machine-learning-blog/introducing-llama-2-on-azure/ba-p/3881233) to know more about Llama 2 on Azure
   
 - Please refer [here](https://github.com/microsoft/aoai-virtual-assistant/) for Microsoft open source Virtual Assistant Accelerator which provides entire bot composer solution for Azure Open AI connected Bot
