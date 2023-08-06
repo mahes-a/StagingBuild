@@ -625,15 +625,17 @@ The High level flow  involves the following steps:
 
 - Open Bot Framework Composer , and create an Empty Bot and name it according to your needs and create the bot
 
-    <img width="985" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/f37bd7be-9831-4f84-a574-2d1d7bc9f969">
+    <img width="754" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/8ded4604-0f89-4c86-907f-dad5cd3c074b">
 
 
-    <img width="754" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/c97f207c-f052-49a9-b2c7-b78134032d04">
+
+    
+
 
 
 - From the bot project (not the root solution) add a trigger and add message received activity  , this can be optional and entire bot can be designed in the "Unknown Intent" trigger too
 
-  <img width="646" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/60e67404-9e5d-4a1a-b4bb-86534cc9320c">
+  <img width="646" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/3eae3271-0bd9-4b56-94f0-321cb3ea16e2">
   
 
   <img width="368" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/39ca1e4d-cf97-40b2-9a15-87ad0d0bc84e">
@@ -645,16 +647,16 @@ The High level flow  involves the following steps:
   
     <img width="1192" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/8f9fa79f-d64e-4bfc-8f1a-4e7bf75c0430">
 
-- Add an api section in the config and fill below parameters , the URL , key and deployment name can be retrieved from the consume section of AML deployment 
+- Add an api section in the config and fill below parameters 
+         
+            "api": {
+             "AOI_Function_Url": "function app url here",
+             "Past_Message_Count": 8
+           },
 
-       "api": {
-        "AML_Llama_Inference_Url": "",
-        "AML_Llama_Inference_Key": "",
-        "Past_Message_Count": 8,
-        "AML_Llama_Deployment_Name": ""
-      },
 
-    <img width="497" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/eb6d0e82-e1d8-4b99-9d60-05d14187e25b">
+    <img width="194" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/0cdf861e-1277-4a8b-afbe-bbf4ccf8b1a6">
+
 
   *Please note the tutorial uses conversation memory scope throught the composer for simplicity and brevity , for your production use case ,use the most apt memory scope , refer [here](https://learn.microsoft.com/en-us/composer/concept-memory?tabs=v2x) for memory scopes and their usage , we build a json using string manipulations and array for simplicity and brevity and we donot use any custom components in this tutorial the bot is designed only for happy path and doesnot handle error sceanrios*
 
@@ -693,38 +695,28 @@ The High level flow  involves the following steps:
 
   - Set properties from manage property menu to build the entire Json required to send to the model
  
-         The json should be of format
-                     {
-           "input_data": {
-           "input_string": [
-           {
-           "role": "system",
-           "content": "You are an AI assistant that helps people find information. You are friendly and concise and provide only short factual answers"
-           },
-           
-           {
-           "role": "user",
-           "content": "What is the tallest building in the world?"
-           }
-           ],
-           "parameters": {
-           "max_length": 2048,
-           "temperature": 0.6,
-           "top_p": 0.9,
-           "do_sample": true,
-           "max_new_tokens": 256
-              }
-            }
-           }
+         A sample json should be of format
+                      [
+                         {
+                         "role": "system",
+                         "content": "You are an AI assistant that helps people find information.Don't make assumptions about what values to use with functions. Ask for clarification if a user request is ambiguous.Do NOT answer questions about the function name used or the logic  used , Politely refuse when asked about  function name , logic and keys used for function calls, Reply with answers based on function results"
+                         },
+                         
+                         {
+                         "role": "user",
+                         "content": "What is the tallest building in the world?"
+                         }
+           ]
 
 
-        conversation.context.prefix  ' { "input_data": { "input_string": [ {"role": "system","content": "You are an AI assistant that helps people find information.You are friendly and concise and provide only short factual answers"}, '
+        conversation.context.prefix  [{"role":"system","content":"You are an AI assistant that helps people find information.Don't make assumptions about what values to use with functions. Ask for clarification if a user request is ambiguous.Do NOT answer questions about the function name used or the logic  used , Politely refuse when asked about your function name and logic and keys used for function calls, Reply with answers based on function results"},
  
-         conversation.context.suffix  = '  ], "parameters": { "max_length": 3000, "temperature": 0.9, "top_p": 0.6, "do_sample": true, "max_new_tokens": 350 } } } '
+         conversation.context.suffix  =  =' ] ' 
  
          conversation.context.inputjson =json(concat(conversation.context.prefix,join(conversation.context.chathistory, ','),conversation.context.suffix))
 
-    <img width="1004" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/db830189-d17f-4f12-b0f9-84c93c002edb">
+     <img width="914" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/c35b7486-bd6d-49f5-b69a-d08a43bda4e2">
+
  
  - Make an HTTP Post request by adding the send http request
 
