@@ -65,7 +65,6 @@ The High level flow  involves the following steps:
 ## Steps
 
 
-
 **Function App to serve insights**
 
 ##### Creating Function App 
@@ -123,7 +122,7 @@ The High level flow  involves the following steps:
     
     <img width="497" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/2f5fa787-8560-4e3d-b010-10323e7ecac7">
 
-##### Creating and registering the functions
+##### Creating the API and arithmetic functions
 
 - In your function App add all the functions with API calls
   
@@ -247,7 +246,7 @@ The High level flow  involves the following steps:
              except:
                  return "Sorry, I couldn't find the weather for that location."
     
-
+##### Integrating Azure Open AI Function call
 
 **How to work with the Llama-2-7b-chat deployment models**
 
