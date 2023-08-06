@@ -27,9 +27,9 @@ The High level flow  involves the following steps:
 ## Teams Screen Grab
 
 
+<img width="859" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/4ee2d3e6-3232-4cb1-a45a-e1979ef03ea2">
  
 
-# TBD #
 
 
 ## Prerequisites
@@ -182,7 +182,7 @@ The High level flow  involves the following steps:
   -  Get Current stock price using the freemium developer api
   -  Get Current weather  using the freemium developer api
   
-*The functions provided in this sample are modified to return simple strings from Json results without robust exception handling , Please esnure to thoroughly validate and test the freemium sample API before integrating it into your application. This includes checking for error handling, response validation, and understanding any potential limitations or restrictions and more* 
+*The functions provided in this sample are modified to return simple strings from Json results without robust exception handling , Please ensure to thoroughly validate and test the freemium sample API before integrating it into your application. This includes checking for error handling, response validation, and understanding any potential limitations or restrictions and more* 
 
        def get_current_time(location):
              try:
@@ -499,7 +499,7 @@ The High level flow  involves the following steps:
                        return(response_message['content'])
 
 
-##### Function App HTTP trigger recieve User prompts and send responses via Azure Open AI 
+##### Function App HTTP trigger receive  User prompts and send responses via Azure Open AI 
 
 - Within your HTTP trigger method add below , the code responds only the response string from Azure Open AI , update route name @app.route(route="YourAppRouteName")
 
@@ -583,7 +583,7 @@ The High level flow  involves the following steps:
                      }
                    ]
 
-- If the conversation history is too long we would exceed the maximum token limit and would result in errors , In the bot composer we would remove the oldest User question and assitant answers whenever a configured threshold is reached , this would prevent us from hitting the token limit . After removing the oldest question and answers the above Json would look like below
+- If the conversation history is too long we would exceed the maximum token limit and would result in errors , In the bot composer we would remove the oldest User question and assistant answers whenever a configured threshold is reached , this would prevent us from hitting the token limit . After removing the oldest question and answers the above Json would look like below
   
            [
                        {
@@ -658,7 +658,7 @@ The High level flow  involves the following steps:
     <img width="194" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/0cdf861e-1277-4a8b-afbe-bbf4ccf8b1a6">
 
 
-  *Please note the tutorial uses conversation memory scope throught the composer for simplicity and brevity , for your production use case ,use the most apt memory scope , refer [here](https://learn.microsoft.com/en-us/composer/concept-memory?tabs=v2x) for memory scopes and their usage , we build a json using string manipulations and array for simplicity and brevity and we donot use any custom components in this tutorial the bot is designed only for happy path and doesnot handle error sceanrios*
+  *Please note the tutorial uses conversation memory scope throughout the composer for simplicity and brevity , for your production use case ,use the most apt memory scope , refer [here](https://learn.microsoft.com/en-us/composer/concept-memory?tabs=v2x) for memory scopes and their usage , we build a json using string manipulations and array for simplicity and brevity and we donot use any custom components in this tutorial the bot is designed only for happy path and does not handle error scenarios*
 
 - First step lets Create a Array property to hold user question and answers , coalesce to prevent errors on first time load
 
