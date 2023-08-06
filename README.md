@@ -171,6 +171,7 @@ The High level flow  involves the following steps:
 
 ##### Creating the API and arithmetic functions
 
+#### Note:- The Function calling code is Inspired and Adapted from [MS learn Function calling Article](https://learn.microsoft.com/en-us/azure/ai-services/openai/how-to/function-calling) and [working_with_functions.ipynb](https://github.com/Azure-Samples/openai/blob/main/Basic_Samples/Functions/working_with_functions.ipynb)
 - In your function App add all the functions with API calls
   
 - We have below  functions
@@ -293,7 +294,209 @@ The High level flow  involves the following steps:
              except:
                  return "Sorry, I couldn't find the weather for that location."
     
-##### Integrating Azure Open AI Function call
+##### Integrating Azure Open AI Function call 
+
+- Use code below the integrate Azure Open AI function calling in our Azure Function
+  *As mentioned above refer [here](https://github.com/Azure-Samples/openai/blob/main/Basic_Samples/Functions/working_with_functions.ipynb) to understand the function calling  logic*
+
+          functions = [
+                  {
+                      "name": "get_current_time",
+                      "description": "Get the current time in a given location",
+                      "parameters": {
+                          "type": "object",
+                          "properties": {
+                              "location": {
+                                  "type": "string",
+                                  "description": "The location name. The pytz is used to get the timezone for that location. Location names should be in a format like America/New_York, Asia/Bangkok, Europe/London",
+                              }
+                          },
+                          "required": ["location"],
+                      },
+                  },
+                  {
+                      "name": "get_auto_sales_data",
+                      "description": "Get the sales  data for a given car brand",
+                      "parameters": {
+                          "type": "object",
+                          "properties": {
+                              "carbrand": {
+                                  "type": "string",
+                                  "description": "The car brand name. Car brand names are like Honda , Toyota , Ford" },
+                          },
+                          "required": ["carbrand"],
+                      },    
+                  },
+                  {
+                      "name": "calculator",
+                      "description": "A simple calculator used to perform basic arithmetic operations",
+                      "parameters": {
+                          "type": "object",
+                          "properties": {
+                              "num1": {"type": "number"},
+                              "num2": {"type": "number"},
+                              "operator": {"type": "string", "enum": ["+", "-", "*", "/", "**", "sqrt"]},
+                          },
+                          "required": ["num1", "num2", "operator"],
+                      },
+                  },
+                  {
+                      "name": "get_stockprice",
+                      "description": "Retrieve the stock price for a given stock symbol",
+                      "parameters": {
+                          "type": "object",
+                          "properties": {
+                              "symbol":  {
+                              "type": "string",
+                              "description": "Stock symbol, for example MSFT for Microsoft , AAPL for Apple"
+                              }
+                          },
+                          "required": ["symbol"],
+                      },
+                  },
+                  {
+                      "name": "getweather",
+                      "description": "Retrieve the weather  for a given location",
+                      "parameters": {
+                          "type": "object",
+                          "properties": {
+                              "location":  {
+                              "type": "string",
+                              "description": "location of a city, for example London , LA for Los Angeles"
+                              }
+                          },
+                          "required": ["location"],
+                      },
+                  },
+                  {
+                      "name": "get_bing_search_results",
+                      "description": "Retrieve the web search results from bing api",
+                      "parameters": {
+                          "type": "object",
+                          "properties": {
+                              "query":  {
+                              "type": "string",
+                              "description": "query for bing search , for example what is Azure AI"
+                              }
+                          },
+                          "required": ["query"],
+                      },
+                  }
+              ]
+          
+          available_functions = {
+                      "get_current_time": get_current_time,
+                      "get_auto_sales_data": get_auto_sales_data,
+                      "calculator": calculator,
+                      "get_stockprice":get_stockprice,
+                      "getweather":getweather,
+                      "get_bing_search_results":get_bing_search_results
+                  } 
+
+
+
+           #helper method used to check if the correct arguments are provided to a function
+
+               def check_args(function, args):
+                   sig = inspect.signature(function)
+                   params = sig.parameters
+               
+                   #Check if there are extra arguments
+                   for name in args:
+                       if name not in params:
+                           return False
+                   #Check if the required arguments are provided 
+                   for name, param in params.items():
+                       if param.default is param.empty and name not in args:
+                           return False
+               
+                   return True
+               
+               
+               def run_conversation(messages, functions, available_functions, deployment_id):
+                   #Step 1: send the conversation and available functions to GPT
+               
+                   response = openai.ChatCompletion.create(
+                       deployment_id=deployment_id,
+                       messages=messages,
+                       functions=functions,
+                       function_call="auto",
+                       temperature=0.7,
+                       max_tokens=700,
+                       top_p=0.95,
+                       frequency_penalty=0,
+                       presence_penalty=0,
+                       stop=None
+                   )
+                   response_message = response["choices"][0]["message"]
+               
+                   
+               
+                   #Step 2: check if GPT wanted to call a function
+                   if response_message.get("function_call"):
+                       print("Recommended Function call:")
+                       print(response_message.get("function_call"))
+                       
+                       
+                       #Step 3: call the function
+                       #Note: the JSON response may not always be valid; be sure to handle errors
+                       
+                       function_name = response_message["function_call"]["name"]
+                       
+                       #verify function exists
+                       if function_name not in available_functions:
+                           return "Function " + function_name + " does not exist"
+                       function_to_call = available_functions[function_name]  
+                       
+                       #verify function has correct number of arguments
+                       function_args = json.loads(response_message["function_call"]["arguments"])
+                       if check_args(function_to_call, function_args) is False:
+                           return "Invalid number of arguments for function: " + function_name
+                       function_response = function_to_call(**function_args)
+                       
+                       print("Output of function call:")
+                       print(function_response)
+                       print()
+                       
+                       #Step 4: send the info on the function call and function response to GPT
+                       
+                       #adding assistant response to messages
+                       messages.append(
+                           {
+                               "role": response_message["role"],
+                               "name": response_message["function_call"]["name"],
+                               "content": response_message["function_call"]["arguments"],
+                           }
+                       )
+               
+                       #adding function response to messages
+                       messages.append(
+                           {
+                               "role": "function",
+                               "name": function_name,
+                               "content": function_response,
+                           }
+                       )  #extend conversation with function response
+               
+                       print("Messages in second request:")
+                       for message in messages:
+                           print(message)
+                       print()
+               
+                       second_response = openai.ChatCompletion.create(
+                           messages=messages,
+                           deployment_id=deployment_id,
+                           temperature=0.7,
+                           max_tokens=1000,
+                           top_p=0.95,
+                           frequency_penalty=0,
+                           presence_penalty=0,
+                           stop=None
+                       )  # get a new response from GPT where it can see the function response
+               
+                       return second_response
+                   else :
+                       return(response_message['content'])
 
 **How to work with the Llama-2-7b-chat deployment models**
 
