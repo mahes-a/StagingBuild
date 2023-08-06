@@ -47,6 +47,8 @@ The High level flow  involves the following steps:
 
 - When using function calling to integrate language models with other tools and systems, like any AI system, it is essential to acknowledge and address the potential risks involved. It is crucial to have a clear understanding of these risks and take appropriate measures to ensure responsible use of the capabilities. Refer [here](https://learn.microsoft.com/en-us/azure/ai-services/openai/how-to/function-calling#using-function-calling-responsibly) for responsible function calling
   
+- Function calling is in preview and supported only from OPENAI_API_VERSION of "2023-07-01-preview"
+  
 -  The bot maintains conversation history to be passed to the model and ensures conversation history is maintained only for pre-configured number of conversation turns to prevent hitting token limits in its memory, the state management in the bot is a sample and may not be suited for Production workloads 
 
 - Please note that this tutorial is intended for explorative and illustrative purposes only. It is meant to inspire ideas and should not be taken as prescriptive advice. Any implementation of the techniques described in this tutorial as part of your application should be thoroughly validated and evaluated to ensure accuracy, validity, compatibility with your specific use case and technical environment.
@@ -55,109 +57,197 @@ The High level flow  involves the following steps:
 
 - While LLMs have tremendous potential across many industries and use cases, it is essential to ensure that they are built in a safe and responsible manner. This includes taking steps to mitigate potential risks and ensure that the model will not cause harm to users or result in reputational damage to organizations. It is important to carefully consider the ethical implications of LLMs and to develop appropriate safeguards to protect against potential harms.
   
-- The tutorial uses developer free sample APIs as they are a convenient way to experiment and test integration with various services but  it is crucial to thoroughly validate and test the free sample API before integrating it into your application. This includes checking for error handling, response validation, and understanding any potential limitations or restrictions.
+- The tutorial uses developer freemium sample APIs as they are a convenient way to experiment and test integration with various services but  it is crucial to thoroughly validate and test the free sample API before integrating it into your application. This includes checking for error handling, response validation, and understanding any potential limitations or restrictions.
   
 - There are no warranties of any kind, express or implied, about the completeness, accuracy, reliability, suitability or availability with respect to the information provided. 
 
 
 ## Steps
 
-*As noted in the Prerequisites sections Deploying Llama 2 models requires GPU compute of V100 / A100 SKUs , Please ensure you have quota available for v100 or A100* 
-
-**Create an Azure Machine learning real-time inference endpoint that hosts Llama-2-7b-chat model with built in Azure AI Content Safety**
-
-##### Deploying Llama-2-7b-chat model with Azure AI Content Safety
-
-- Login into your ML Studio [here](https://ml.azure.com/)
-
-   <img width="998" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/b905bda5-79df-41cf-b444-28beb0543953">
-
-- Select your workspace , Select "Model Catalog" menu from left and click on View models in Introducing Llama 2 section
-
-   <img width="1128" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/e443154b-f7aa-4852-adeb-59b9d92c5c83">
-
-- Choose Llama-2-7b-chat model 
-
-     <img width="1111" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/96b62efa-e9b5-42a4-a2f9-40997fcba1df">
 
 
-     <img width="563" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/67ed9385-7b78-4f12-bfb5-cb5b92768f63">
+**Function App to serve insights**
 
--  Click on Deploy -> Real-time endpoint option and ensure you chose Enable Azure AI Content Safety (Recommended) option and click proceed. Multiple layers of safety mechanism are recommended for LLM's for Responsible AI 
+##### Creating Function App 
 
-    <img width="512" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/c901f8ba-86cb-4ae9-9909-7e7eb3985e7b">
+- The Sample uses Python Azure Functions developed in Visual Studio Code , Please refer [here](https://learn.microsoft.com/en-us/azure/azure-functions/functions-develop-vs-code?tabs=python) on how to create , add triggers and deploy azure functions via VS code
 
-    <img width="465" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/96d5e3a7-c7b5-41aa-941c-3cc4e2a70a21">
+##### Function App Configurations 
+- Configure the keys and endpoints in local.settings.json
 
+  
+         {
+           "IsEncrypted": false,
+           "Values": {
+             "AzureWebJobsStorage": "",
+             "FUNCTIONS_WORKER_RUNTIME": "python",
+             "OPEN_AI_DEPLOYMENT": "",
+             "OPENAI_API_BASE": "https://youropeniresourcename.openai.azure.com",
+             "OPENAI_API_VERSION": "2023-07-01-preview",
+             "OPENAI_API_KEY": "",
+             "bing_subscription_key": "",
+             "bing_search_endpoint": "https://api.bing.microsoft.com/v7.0/search",
+             "vantage_key": "",
+             "vantage_url": "",
+             "yahoo_weather_url": "",
+             "yahoo_weather_key": ""
+           }
+         }
+
+
+- To fill in configurations follow below
+
+-   In Azure Open AI Create a GPT 3.5 deployment 
+
+   <img width="864" alt="image" src="https://github.com/mahes-a/Wingman/assets/120069348/dd9b5f1e-7ee2-47aa-9ade-bd2c750ffa62">
+
+ - Note down the OPENAI_API_KEY and endpoint, they can be retrieved from Azure Portal Azure OpenAI resource under Keys and Endpoint section
     
--  This will open a notebook
+      <img width="620" alt="image" src="https://github.com/mahes-a/Wingman/assets/120069348/646b0ebf-bf99-45cd-bc90-ee0fcf384b1c">
 
-     <img width="981" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/0ad10429-b803-4551-8bb2-62dcb4edee56">
+  - From your Bing Search resource in Azure Keys and Endpoints section , copy the keys
 
-- Clone the notebook and open llama-safe-online-deployment.ipynb
+      <img width="947" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/be07fc54-3099-42db-8792-74d5da16a8c1">
 
-     <img width="1019" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/6f7c1b10-1c54-46a4-bade-8b8a79d17e9d">
-
- -  Choose your compute, either your pre-created compute instance or serverless if you don’t have compute instance created
-
--  Choose the model_name as "Llama-2-7b-chat" , update endpoint_name , deployment_name  if needed and  The sku_name would be the A100 or V100 GPU SKU , at present  it defaults to Standard_NC24s_v3 SKU and execute the notebook
-
-    <img width="554" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/355f73d1-3f0d-47b2-a301-910f558096a5">
-
-
--  Uncomment and install dependencies
-
-    <img width="534" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/dc5bf161-2344-4dd2-88aa-4432d6b7562e">
-
--  Run the Get Credential section
-
-    <img width="766" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/3c8fe189-5599-452f-a3b3-525e93f089e8">
-
--  Enter your AML subscription_id , resource group and aml workspace name and execute
-
-   <img width="625" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/88be6260-acf2-4748-bec8-f5e33853da2f">
-
-   
-- Kindly go through the Note section to understand the  region to deploy the Azure AI Content Safety and Choose the region for deploying the content safety resource according to your needs and compliance laws , The default choses "east us" , Please change according to your needs
-
-     <img width="994" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/e5a24d4f-3ec8-44e3-a182-274b8c24224e">
-
-- Create Azure content safety resource
-  
-    <img width="749" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/8f16e7bf-28f2-42f4-ae0f-7220e0841b68">
-
+  - Function calling is in preview and supported only from "OPENAI_API_VERSION" of "2023-07-01-preview"
     
-- Optional , You can validate the created resource by searching for the content safety resource in the Azure Portal
+  - For Stock and Weather go to the developer api links listed in Prerequisites section
+    
+  - Copy the car sales dataset in csv format in to the Function App solution
+    
+  - Add packages to the requirements.txt file-
+              azure-functions
+              openai
+              pytz
+              pandas
+    
+    <img width="497" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/2f5fa787-8560-4e3d-b010-10323e7ecac7">
 
-     <img width="1169" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/33dd7224-cf94-4ec0-9287-b34c19f2e00a">
+##### Creating and registering the functions
 
-- Run 3.1 and 3.2 to create a endpoint for the Llama-2-7b-chat , this would take few minutes
-
-  <img width="736" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/b0894558-35d6-4e29-b375-896248762550">
-
-- Deploy the Llama 2 model with the content safety resource to the endpoint created in previous steps , this would take several minutes , wait for completion 
+- In your function App add all the functions with API calls
   
-    <img width="698" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/7230fa15-a23c-4577-81d0-5c7384ecf10e">
-
-- Once Successful , switch to the endpoints section and click on the Llama2 endpoint in the Real-time endpoint section
-
-    <img width="877" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/cfd87fef-ec4b-4c86-ac3c-a50f4c5b6564">
-
-    <img width="937" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/5ea8d98c-7891-48bc-837c-95317fee6867">
-
-
-- Lets select the test tab and provide a input Json to test the Llama-2-7b-chat deployment
-
-   <img width="881" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/c62aa452-5c1f-4667-aa12-a0618c82c49d">
-
-- Optional Sample inputs and outputs are available in the Llama-2-7b-chat model page , to navigate to the model page select your workspace , Select "Model Catalog" menu from left and click on View models in Introducing Llama 2 section Choose Llama-2-7b-chat model 
-
-    <img width="563" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/52fefbac-d2e7-4e58-973a-124a95b1b2b1">
-
+- We have below  functions
+  -  Get current time for a location using pytz
+  -  Basic Arithmetic calculator
+  -  Return top 1 search result from bing search (modify as needed to return more)
+  -  Use Pandas dataframe to filter data from Car sales dataset
+  -  Get Current stock price using the freemium developer api
+  -  Get Current weather  using the freemium developer api
   
-- In the endpoints section and click on the Llama2 endpoint in the Real-time endpoint section and select the Consume tab , Note down the Rest endpoint , deployment name and Authentication key these will be used to make the request from the Bot
- 
-    <img width="856" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/6132b03f-ea92-4145-963a-74160a358ff8">
+*The functions provided in this sample are modified to return simple strings from Json results without robust exception handling , Please esnure to thoroughly validate and test the freemium sample API before integrating it into your application. This includes checking for error handling, response validation, and understanding any potential limitations or restrictions and more* 
+
+       def get_current_time(location):
+             try:
+                 # Get the timezone for the city
+                 timezone = pytz.timezone(location)
+         
+                 # Get the current time in the timezone
+                 now = datetime.now(timezone)
+                 current_time = now.strftime("%I:%M:%S %p")
+         
+                 return current_time
+             except:
+                 return "Sorry, I couldn't find the timezone for that location."      
+             
+             
+         
+         
+         def calculator(num1, num2, operator):
+             if operator == '+':
+                 return str(num1 + num2)
+             elif operator == '-':
+                 return str(num1 - num2)
+             elif operator == '*':
+                 return str(num1 * num2)
+             elif operator == '/':
+                 return str(num1 / num2)
+             elif operator == '**':
+                 return str(num1 ** num2)
+             elif operator == 'sqrt':
+                 return str(math.sqrt(num1))
+             else:
+                 return "Invalid operator"
+             
+         
+         
+         def get_bing_search_results(query):
+             mkt = 'en-US'
+             params = { 'q': query, 'mkt': mkt ,"count":1, "answerCount":1 ,"textDecorations": True, "textFormat": "HTML","responseFilter":"webpages" }
+             headers = { 'Ocp-Apim-Subscription-Key': subscription_key }
+             try:
+                 response = requests.get(search_url, headers=headers, params=params)
+                 response.raise_for_status()
+                 data= (response.json())
+                 #data = json.loads(json_data)
+                 name = data['webPages']['value'][0]['name']  
+                 url = data['webPages']['value'][0]['url']  
+                 return name + ' ' + url
+             except Exception as ex:
+                 raise ex
+             
+         
+         
+         def get_auto_sales_data(carbrand):
+             try:
+                 
+                 # Read the CSV file , file name as UsAutoSales2022.csv 
+                 data = pd.read_csv('UsAutoSales2022.csv')
+         
+                 # Filter data for the given index
+                 data_filtered = data[data['Brand'] == carbrand]
+         
+                 
+         
+                 # Convert the DataFrame into a dictionary
+                 hist_dict = data_filtered.to_dict()
+         
+                 for key, value_dict in hist_dict.items():
+                     hist_dict[key] = {k: v for k, v in value_dict.items()}
+         
+                 return json.dumps(hist_dict)
+             except:
+                 return "Sorry, I couldn't find the stock price."
+             
+         
+         def get_stockprice(symbol):
+             try:
+                 url = vantage_url
+                 
+                 querystring = {"function": "GLOBAL_QUOTE", "symbol": "{}", "datatype": "json"}  
+                 querystring["symbol"] = symbol  
+                 headers = {
+                 "X-RapidAPI-Key": vantage_key,
+                 "X-RapidAPI-Host": "get from the devloper api site"}
+                 response = requests.get(url, headers=headers, params=querystring)
+                 #print(response.json())
+                 return('Price for '+ response.json()['Global Quote']['01. symbol'] + ' is ' + response.json()['Global Quote']['05. price'])
+                 #data = json.loads(response.json()) 
+                 
+             except:
+                 return "Sorry, I couldn't find the stock price."
+             
+         
+         def getweather(location):
+             try:
+                 url = weather_url
+                 querystring = {"location":"{}","format":"json","u":"f"}
+                 querystring["location"] = location 
+                 headers = {
+         	"X-RapidAPI-Key": weather_api_key,
+         	"X-RapidAPI-Host": "get from the devloper api site"
+          }
+                 response = requests.get(url, headers=headers, params=querystring)
+                 data=response.json()
+                 location = data['location']['city']  
+                 temperature = data['current_observation']['condition']['temperature']  
+                 result = f"The weather in {location} is {temperature}F"  
+                 return(result)  
+                 #return (response.json())
+             except:
+                 return "Sorry, I couldn't find the weather for that location."
+    
+
 
 **How to work with the Llama-2-7b-chat deployment models**
 
