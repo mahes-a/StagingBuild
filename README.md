@@ -1,4 +1,4 @@
-# Scalable and Efficient Incremental data loading from SQL DB using Change Tracking , CDC and watermark via  Generic Metadata driven pipelines #
+# Microsoft Fabric Scalable and Efficient Data Lake Hydration: Bronze Layer Curation for Change Tracking, CDC, and Watermark Change Capture Mechanisms  #
 
 TBD
 
