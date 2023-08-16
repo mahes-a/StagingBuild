@@ -1,12 +1,11 @@
 # A Step-by-Step Guide to Build a Versatile Multi-Topic Digital Assistant Chatbot powered by Azure Open AI Function Calling #
 
-A Multi-Topic Digital Assistant Chatbot is an intelligent conversational AI solution built to cater to diverse subject matters and assist users. By harnessing the capabilities of natural language processing and machine learning, it comprehends user queries and offers pertinent information or executes tasks accordingly. This advanced chatbot is designed to seamlessly understand and address a broad spectrum of topics, providing valuable assistance to users with accuracy and efficiency.
-
-Users  interact effortlessly through natural language input via Bot channels like Teams. The Function App acts as a bridge, connecting the Bot to Azure Open AI, sending functions and prompts. Azure Open AI processes user input , understands the user's query in depth, extracting the intended meaning and relevant details. This information is then used to provide specific function and parameters. The Function App executes the function, and the response is sent back to Azure Open AI. The Bot then delivers valuable insights and information to the user from the final response from Azure Open AI.
+TBD
 
 ## High-level Architecture
 
- <img width="734" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/d790b4ad-dc05-4b31-85c4-cfd3dc9af48b">
+ <img width="736" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/68d6b525-6eaa-4989-bfa2-d50ecae9dcf7">
+
 
 ## High-level Flow
 
