@@ -11,15 +11,19 @@ TBD
 
 The High level flow  involves the following steps:
 
-- Users input queries using natural language through Bot channels such as Teams.
+- The SQL Tables to be copied and their Full/Incremental copy methodology (Full , Change Capture , CDC , Watermark) is configured in a control table
 
-- The Bot communicates with a Function App, which then communicates with Azure Open AI with the available functions and user prompts.
+- Generic Pipelines are created that can ingest incremental data based on the change capture mechanism
+  
+   -  Pipelines that can copy data for Full load , incremental data copy based on Change Capture , CDC , Watermark are created. 
 
-- Azure Open AI responds by providing the specific function to be executed, along with the parameters extracted from the user's input.
+- Generic Pyspark notebooks that can Upsert and Delete for each incremental data copy mechanism (Change Capture , CDC , Watermark) are created.
 
-- The Function App executes the function, and the response is sent back to Azure Open AI.
+- Orchestration pipeline executes the ingestion and curation notebook for each incremental data copy mechanism (Change Capture , CDC , Watermark)
 
-- The Bot then responds to the user with the final natural language response received from Azure Open AI.
+- Orchestration reads from the control table and for each table to be ingested the corresponding ingestion pipeline and curation notebook is executed
+
+  -  For example , If the table to be ingested has CDC has the change capture mechanism then CDC Ingestion and Bronze layer curation notebook is executed
   
 
 
