@@ -21,7 +21,7 @@ The High level flow  involves the following steps:
 
 - Orchestration pipeline executes the ingestion and curation notebook for each incremental data copy mechanism (Change Capture , CDC , Watermark)
 
-- Orchestration reads from the control table and for each table to be ingested the corresponding ingestion pipeline and curation notebook is executed
+- Orchestration reads from the control table and for each table to be ingested the corresponding ingestion pipeline and curation notebook is executed in parrallel.
 
   -  For example , If the table to be ingested has CDC has the change capture mechanism then CDC Ingestion and Bronze layer curation notebook is executed
   
