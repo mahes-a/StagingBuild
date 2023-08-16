@@ -1,4 +1,4 @@
-# A Step-by-Step Guide to Build a Versatile Multi-Topic Digital Assistant Chatbot powered by Azure Open AI Function Calling #
+# Scalable and Efficient Incremental data loading from SQL DB using Change Tracking , CDC and watermark via  Generic Metadata driven pipelines #
 
 TBD
 
