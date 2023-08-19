@@ -381,5 +381,58 @@ The High level flow  involves the following steps:
 
 - For understanding the flow of the pipeline refer [here](https://learn.microsoft.com/en-us/azure/data-factory/tutorial-incremental-copy-overview#delta-data-loading-from-sql-db-by-using-the-change-tracking-technology)
 
-- 
-  
+- Define the parameters for the pipeline
+          
+             "parameters": {
+                      "TableName": {
+                          "type": "string"
+                      },
+                      "SchemaName": {
+                          "type": "string"
+                      },
+                      "DeltaColumnName": {
+                          "type": "string"
+                      },
+                      "LakeHouseName": {
+                          "type": "string"
+                      },
+                      "OneLakePath": {
+                          "type": "string"
+                      },
+                      "ProcessingPath": {
+                          "type": "string"
+                      },
+                      "UniqueId": {
+                          "type": "string"
+                      }
+                  },
+
+- Lookup the last processed Change tracking version from the configuration database
+
+  <img width="675" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/5d2f81b0-2a36-4da5-9d72-7879fa450172">
+
+
+       Select * from table_store_ChangeTracking_version where TableName= '@{concat(pipeline().parameters.SchemaName,'.', pipeline().parameters.TableName)}'
+
+- Select the current change tracking version
+
+   <img width="797" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/137cec00-4832-4b14-8b84-54006716152a">
+
+         SELECT CHANGE_TRACKING_CURRENT_VERSION() as CurrentChangeTrackingVersion
+
+- Add a copy activity to copy the incremental data between the previous change versions and current change versions
+
+  <img width="806" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/7d29b002-9256-4f48-bd26-19851a8e3d1d">
+
+             SELECT c.*,CT.SYS_CHANGE_VERSION, SYS_CHANGE_OPERATION , CT.@{pipeline().parameters.DeltaColumnName} as  'PrimaryKeyValue'
+           
+           from @{concat(pipeline().parameters.SchemaName,'.', pipeline().parameters.TableName)}  c
+           
+           RIGHT OUTER JOIN 
+           
+           CHANGETABLE(CHANGES @{concat(pipeline().parameters.SchemaName,'.', pipeline().parameters.TableName)} , @{activity('LookupLastChangeTrackingVersionActivity').output.firstRow.SYS_CHANGE_VERSION}) AS CT 
+           
+           ON c.@{pipeline().parameters.DeltaColumnName}  = CT.@{pipeline().parameters.DeltaColumnName}  where CT.SYS_CHANGE_VERSION <= @{activity('LookupCurrentChangeTrackingVersionActivity').output.firstRow.CurrentChangeTrackingVersion}
+
+            Destination file path would be @concat(pipeline().parameters.OneLakePath,pipeline().parameters.TableName,'/','year=',formatDateTime(utcnow(),'yyyy'),'/','month=',formatDateTime(utcnow(),'MM'),'/','day=',formatDateTime(utcnow(),'dd'),'/',pipeline().parameters.UniqueId)
+
