@@ -43,8 +43,49 @@ The High level flow  involves the following steps:
 ## Steps
 
 
-**Function App to serve insights**
+**MetaData SQL Configurations**
 
+- Below is a sample schema for the configutaion table to store the tables to be ingested
+
+           - 
+         CREATE TABLE [dbo].[ControlTable](
+         	[TableID] [int] IDENTITY(1,1) NOT NULL,
+         	[SourceTableName] [varchar](255) NULL,
+         	[FolderPath] [varchar](800) NULL,
+         	[SchemaName] [varchar](50) NULL,
+         	[PartitionColumnName] [varchar](255) NULL,
+         	[PartitionLowerBound] [varchar](50) NULL,
+         	[PartitionUpperBound] [varchar](50) NULL,
+         	[LakeHouseName] [varchar](255) NULL,
+         	[OneLakePath_or_TableName] [varchar](255) NULL,
+         	[CopyMode] [varchar](50) NULL,
+         	[DeltaColumnName] [varchar](255) NULL,
+         	[IsActive] [varchar](10) NULL,
+         	[WaterMarkColumnName] [varchar](100) NULL,
+         	[ProcessingPath] [varchar](255) NULL,
+         	[LakehouseArtifactID] [varchar](255) NULL
+         ) ON [PRIMARY]
+         GO
+- Below is a sample schema for the log table to store custom pipleine run data
+
+          CREATE TABLE [dbo].[IngestionLog](
+        	[Id] [bigint] IDENTITY(1,1) NOT NULL,
+        	[ServerName] [varchar](100) NULL,
+        	[DbName] [varchar](100) NULL,
+        	[TableName] [varchar](100) NULL,
+        	[RunStatus] [varchar](50) NULL,
+        	[SourceCount] [bigint] NULL,
+        	[BronzeCount] [bigint] NULL,
+        	[UpdateDate] [datetime] NULL,
+        	[ErrorMessage] [varchar](max) NULL,
+         CONSTRAINT [PK_IngestionLog] PRIMARY KEY CLUSTERED 
+        (
+        	[Id] ASC
+        )WITH (STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+        ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+        GO
+
+- 
 ##### Creating Function App 
 
 - The Sample uses Python Azure Functions developed in Visual Studio Code , Please refer [here](https://learn.microsoft.com/en-us/azure/azure-functions/functions-develop-vs-code?tabs=python) on how to create , add triggers and deploy azure functions via VS code
