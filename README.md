@@ -571,7 +571,8 @@ The High level flow  involves the following steps:
 
 - Browse to your Fabric enabled workspace in Power Bi and switch to Data Engineering and create a new notebook
 
-<img width="820" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/7016169e-5255-4fea-af66-36b2c48fb928">
+<img width="826" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/cb892262-94d0-459c-8e29-017e728c6ab2">
+
 
 
 - Name the notebook related to CDC curation exacmple "GenericCurationCDC"
@@ -670,6 +671,117 @@ The High level flow  involves the following steps:
               .execute()
 
 - Remove the files processed
+
+          #remove the files for current table  after processing to avoid re-processing
+        from notebookutils import mssparkutils
+        
+        mssparkutils.fs.rm(processing_filepath, True)
+
+
+  ##### Creating the Bronze Curation For Change Tracking Files 
+
+- Browse to your Fabric enabled workspace in Power Bi and switch to Data Engineering and create a new notebook
+
+<img width="826" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/cb892262-94d0-459c-8e29-017e728c6ab2">
+
+
+
+- Name the notebook related to Change Tracking curation exacmple "GenericCurationCH"
+
+- Create the parameters for the notebook in the cell 
+
+<img width="412" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/3e0a0440-e7ec-4aaa-88d6-355c71532574">
+
+
+           #parameters
+         processing_path= ""
+         table_name= ""
+         target_lakehousetablename= ""
+         primaryKeyColumn= ""
+         lakehousename=""
+
+- Import neccassary packages and set configurations
+
+          from delta.tables import *
+        from pyspark.sql.window import Window
+        from pyspark.sql.functions import row_number
+        from pyspark.sql.functions import rank
+        from pyspark.sql.functions import desc
+
+                #configure vorder for Performance
+        spark.conf.set("spark.sql.parquet.vorder.enabled", "true")
+        spark.conf.set("spark.microsoft.delta.optimizeWrite.enabled", "true")
+        spark.conf.set("spark.microsoft.delta.optimizeWrite.binSize", "1073741824")
+
+- Read the Incremental Change Tracking files created from the pipelines
+
+          #get incremental data to be processed
+           processing_filepath=""
+           processing_filepath = lakehousename +'/Files/'+processing_path+table_name+"/"
+           print(processing_filepath)
+           df_changetracking = spark.read.parquet(processing_filepath)
+           #display(df_changetracking)
+
+- Read the delta table where upserts and deletes should happen
+
+          #get delta table data to be processed
+       tablequery = lakehousename +'/Tables/'+target_lakehousetablename
+       #assumes Delta table exists , add validation for not exists
+       if DeltaTable.isDeltaTable(spark,tablequery):
+           df_table = DeltaTable.forPath(spark,tablequery)
+
+- Create Dataframes that contain data for Updates , Deletes , Inserts from Change Tracking files
+
+         
+                    #This filters and saves the Insert data to a separate dataframe
+         inserted_rows_df = df_changetracking.filter("SYS_CHANGE_OPERATION = 'I'")
+         windowSpec  = Window.partitionBy("PrimaryKeyValue").orderBy(desc("SYS_CHANGE_VERSION")) 
+         
+         #This filters and saves the update data to a separate dataframe
+         updated_rows_df_int = df_changetracking.filter("SYS_CHANGE_OPERATION = 'U'").withColumn("rank",rank().over(windowSpec))
+         #remove duplicates based on Key
+         updated_rows_df = updated_rows_df_int.filter("rank == 1")
+         
+         #This filters and saves the delete data to a separate dataframe
+         deleted_rows_df = df_changetracking.filter("SYS_CHANGE_OPERATION = 'D'")
+         #display(deleted_rows_df)
+
+- Execute the deletes , Updates , Inserts by joining the dataframes with the delta table
+
+                  from delta.tables import *
+                  
+                  #This deletes the delete incremental rows
+                  df_table.alias('inc') \
+                    .merge(
+                      deleted_rows_df.alias('update'),
+                      'inc.' + primaryKeyColumn + '=' + 'update.primaryKeyValue' 
+                    ) \
+                   .whenMatchedDelete(
+                    ) \
+                    .execute()
+
+                  #This inserts the insert incremental rows 
+                 #whenNotMatchedInsertAll and whenMatchedUpdateAll can be in  a single statement for clarity two sep statements
+                 df_table.alias('inc') \
+                   .merge(
+                     inserted_rows_df.alias('update'),
+                      'inc.' + primaryKeyColumn + '=' + 'update.' + primaryKeyColumn
+                   ) \
+                  .whenNotMatchedInsertAll(
+                   ) \
+                   .execute()
+                 
+                 #This updates the update incremental rows 
+                 df_table.alias('inc') \
+                   .merge(
+                     updated_rows_df.alias('update'),
+                      'inc.' + primaryKeyColumn + '=' + 'update.' + primaryKeyColumn
+                   ) \
+                  .whenMatchedUpdateAll(
+                   ) \
+                   .execute()
+
+  - Remove the files processed
 
           #remove the files for current table  after processing to avoid re-processing
         from notebookutils import mssparkutils
