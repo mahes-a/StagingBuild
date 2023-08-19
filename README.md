@@ -600,3 +600,78 @@ The High level flow  involves the following steps:
         spark.conf.set("spark.sql.parquet.vorder.enabled", "true")
         spark.conf.set("spark.microsoft.delta.optimizeWrite.enabled", "true")
         spark.conf.set("spark.microsoft.delta.optimizeWrite.binSize", "1073741824")
+
+- Read the Incremental CDC files created from the pipelines
+
+          #get incremental data to be processed and rename sql cdc columns for clarity
+        processing_filepath=""
+        processing_filepath = lakehousename + '/Files/'+processing_path+table_name+"/"
+        #processing_filepath = lakehousename + '/Files/'+processing_path
+        df_sqlcdc = spark.read.parquet(processing_filepath).withColumnRenamed("__$operation","operation").withColumnRenamed("__$seqval","seqval").drop("__$start_lsn","__$update_mask")
+        #display(df_sqlcdc)
+
+- Read the delta table where upserts and deletes should happen
+
+          #get delta table data to be processed
+       tablequery = lakehousename +'/Tables/'+target_lakehousetablename
+       #assumes Delta table exists , add validation for not exists
+       if DeltaTable.isDeltaTable(spark,tablequery):
+           df_table = DeltaTable.forPath(spark,tablequery)
+
+- Create Dataframes that contain data for Updates , Deletes , Inserts from CDC files
+
+         
+           #This filters and saves the Insert data to a separate dataframe
+         inserted_rows_df = df_sqlcdc.filter("operation = '2'")
+         windowSpec = Window.partitionBy(primaryKeyColumn).orderBy(
+                 desc("seqval")
+             )
+         
+         #This filters and saves the update data to a separate dataframe
+         updated_rows_df_int = df_sqlcdc.filter("operation in ('3','4')").withColumn("rank",rank().over(windowSpec))
+         #remove duplicates based on Key
+         updated_rows_df = updated_rows_df_int.filter("rank == 1")
+         
+         #This filters and saves the delete data to a separate dataframe
+         deleted_rows_df = df_sqlcdc.filter("operation = '1'")
+
+  
+- Execute the deletes , Updates , Inserts by joining the dataframes with the delta table
+
+            #This deletes the delete incremental rows
+          df_table.alias('inc') \
+            .merge(
+              deleted_rows_df.alias('update'),
+              'inc.' + primaryKeyColumn + '=' + 'update.' + primaryKeyColumn
+            ) \
+           .whenMatchedDelete(
+            ) \
+            .execute()
+
+                    #This inserts the insert incremental rows 
+           #whenNotMatchedInsertAll and whenMatchedUpdateAll can be in  a single statement for clarity two sep statements
+           df_table.alias('inc') \
+             .merge(
+               inserted_rows_df.alias('update'),
+                'inc.' + primaryKeyColumn + '=' + 'update.' + primaryKeyColumn
+             ) \
+            .whenNotMatchedInsertAll(
+             ) \
+             .execute()
+
+              #This updates the update incremental rows 
+            df_table.alias('inc') \
+              .merge(
+                updated_rows_df.alias('update'),
+                 'inc.' + primaryKeyColumn + '=' + 'update.' + primaryKeyColumn
+              ) \
+             .whenMatchedUpdateAll(
+              ) \
+              .execute()
+
+- Renove the files processed
+
+          #remove the files for current table  after processing to avoid re-processing
+        from notebookutils import mssparkutils
+        
+        mssparkutils.fs.rm(processing_filepath, True)
