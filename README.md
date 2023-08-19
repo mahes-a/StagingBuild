@@ -325,5 +325,30 @@ The High level flow  involves the following steps:
         @greater(int(activity('Get CDC Change Count').output.firstRow.changecount),0)
 
 
+- Within the True section of the If activity , Copying of the delta data and upadting the logs and LSN values happen
+
+  <img width="784" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/c51ba082-710b-404a-8706-371c91258f37">
+
+- In the copy activity source , establish connection to SQL server and use below query to pull incremental  data from the CDC functions
+  
+ <img width="751" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/c32cd554-1be6-4e16-902a-35ccad3e59f9">
+
+          @concat('DECLARE @begin_time datetime, @end_time datetime, @from_lsn binary(10), @to_lsn binary(10) ; 
+         SET @begin_time = ''',activity('LookupLSNCDC').output.firstRow.CDCLastRun,''';
+         SET @end_time = ''',pipeline().parameters.LSNEndTime,''';
+         SET @from_lsn = sys.fn_cdc_map_time_to_lsn(''smallest greater than or equal'', @begin_time);
+         SET @to_lsn = sys.fn_cdc_map_time_to_lsn(''largest less than or equal'', @end_time);
+         SELECT * FROM cdc.fn_cdc_get_all_changes_',pipeline().parameters.SchemaName,'_',pipeline().parameters.TableName,'(@from_lsn, @to_lsn, ''all'')')
+
+
+  - In the destination of the Copy Activity Parameterize the LakeHouse object ID and the file path to be written
+
+    <img width="800" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/de7bb4b0-851e-4ea5-8352-6e6dd29a8e81">
+
+              @pipeline().parameters.LakeHouseName
+                @concat(pipeline().parameters.OneLakePath,pipeline().parameters.TableName,'/','year=',formatDateTime(utcnow(),'yyyy'),'/','month=',formatDateTime(utcnow(),'MM'),'/','day=',formatDateTime(utcnow(),'dd'),'/',pipeline().parameters.UniqueID)
+          
+
+
 
      
