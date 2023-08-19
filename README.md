@@ -230,6 +230,12 @@ The High level flow  involves the following steps:
 
 - Refer [here](https://learn.microsoft.com/en-us/azure/data-factory/connector-sql-server?tabs=data-factory#parallel-copy-from-sql-database) to understand various parrallel copy partition options  
 
+- In order to configure the Target Lakehouse file location and the target lakehouse in fabric follow below steps
+  
+  -  To retrieve the LakeHouseName , Select any table or file within the fabric lakehouse and click on properties and select the ABFS path until the lakehouse name , the format would be abfss://<workspacename>@<tenanttname>-onelake.dfs.fabric.microsoft.com/<lakehousename>.Lakehouse
+
+      <img width="439" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/0248e8ff-efd7-4d68-8d7a-73968aff4132">
+
 
 ##### Function App Configurations 
 
