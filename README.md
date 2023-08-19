@@ -501,4 +501,4 @@ The High level flow  involves the following steps:
 
      <img width="754" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/529eb8c8-8ecf-4d3f-b0d2-046ada5428bf">
 
-     
+ - Log sucess and Failures and copy the file for further curation , Refer to CDC copy section for complete details on these steps 
