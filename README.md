@@ -787,3 +787,88 @@ The High level flow  involves the following steps:
         from notebookutils import mssparkutils
         
         mssparkutils.fs.rm(processing_filepath, True)
+
+ ##### Creating the Bronze Curation For Watermarking files
+
+- Browse to your Fabric enabled workspace in Power Bi and switch to Data Engineering and create a new notebook
+
+<img width="826" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/cb892262-94d0-459c-8e29-017e728c6ab2">
+
+
+
+- Name the notebook related to watermark curation exacmple "GenericCurationWatermark"
+
+- Create the parameters for the notebook in the cell 
+
+<img width="412" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/3e0a0440-e7ec-4aaa-88d6-355c71532574">
+
+
+           #parameters
+              processing_path= ""
+              table_name= ""
+              target_lakehousetablename= ""
+              primaryKeyColumn= ""
+              watermarkKeyColumn=""
+              lakehousename=""
+
+- Import neccassary packages and set configurations
+
+          from delta.tables import *
+        from pyspark.sql.window import Window
+        from pyspark.sql.functions import row_number
+        from pyspark.sql.functions import rank
+        from pyspark.sql.functions import desc
+
+                #configure vorder for Performance
+        spark.conf.set("spark.sql.parquet.vorder.enabled", "true")
+        spark.conf.set("spark.microsoft.delta.optimizeWrite.enabled", "true")
+        spark.conf.set("spark.microsoft.delta.optimizeWrite.binSize", "1073741824")
+
+- Read the Incremental Change Tracking files created from the pipelines
+
+             #get incremental data to be processed and rename sql cdc columns for clarity
+             processing_filepath=""
+             #processing_filepath = '/lakehouse/'+ lakehousename +'/Files/'+processing_path+table_name+'/'
+             processing_filepath = lakehousename +'/Files/'+processing_path+table_name+'/'
+             
+             df_watermark = spark.read.parquet(processing_filepath)
+
+- Read the delta table where upserts and deletes should happen
+
+          #get delta table data to be processed
+       tablequery = lakehousename +'/Tables/'+target_lakehousetablename
+       #assumes Delta table exists , add validation for not exists
+       if DeltaTable.isDeltaTable(spark,tablequery):
+           df_table = DeltaTable.forPath(spark,tablequery)
+
+- Create Dataframes that contain data for Updates , Inserts from Change Tracking files
+
+         
+                windowSpec = Window.partitionBy(primaryKeyColumn).orderBy(desc(watermarkKeyColumn))
+
+               #This filters and saves the update data to a separate dataframe
+               insertedupdated_rows_df_int = df_watermark.withColumn("rank",rank().over(windowSpec))
+               #remove duplicates based on Key
+               ins_updated_rows_df = insertedupdated_rows_df_int.filter("rank == 1")
+
+
+- Execute the Updates , Inserts by joining the dataframes with the delta table
+
+                               #This inserts/updates the insert incremental rows 
+               #whenNotMatchedInsertAll and whenMatchedUpdateAll 
+               df_table.alias('inc') \
+                 .merge(
+                   ins_updated_rows_df.alias('update'),
+                    'inc.' + primaryKeyColumn + '=' + 'update.' + primaryKeyColumn
+                 ) \
+                .whenNotMatchedInsertAll(
+                 ) \
+                 .whenMatchedUpdateAll(
+                 ) \
+                 .execute()
+- Remove the files processed
+
+          #remove the files for current table  after processing to avoid re-processing
+        from notebookutils import mssparkutils
+        
+        mssparkutils.fs.rm(processing_filepath, True)
