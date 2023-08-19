@@ -502,3 +502,55 @@ The High level flow  involves the following steps:
      <img width="754" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/529eb8c8-8ecf-4d3f-b0d2-046ada5428bf">
 
  - Log sucess and Failures and copy the file for further curation , Refer to CDC copy section for complete details on these steps 
+
+##### Creating the Generic Full Load Pipeline
+
+- Browse to your Fabric enabled workspace in Power Bi and switch to Data Factory and create a new pipeline
+
+  <img width="388" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/5d27b4f1-b4a0-4ff0-9483-f6babc7b0cf6">
+
+- Name the Pipeline related to Full copy  , For example "PL_Generic_Full_Load"
+
+- Parameters for the pipeline is listed below
+
+            "parameters": {
+                        "SchemaName": {
+                            "type": "string"
+                        },
+                        "TableName": {
+                            "type": "string"
+                        },
+                        "OneLakePath_or_TableName": {
+                            "type": "string"
+                        },
+                        "PartitionColumnName": {
+                            "type": "string"
+                        },
+                        "PartitionUpperBound": {
+                            "type": "string"
+                        },
+                        "PartitionLowerBound": {
+                            "type": "string"
+                        },
+                        "LakeHouseName": {
+                            "type": "string"
+                        }
+                    },
+
+- For the full load , the table in the Lakehouse is overwritten and no files are created
+
+  <img width="539" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/2004987d-544a-4aaf-97fa-c55389deab17">
+
+
+  
+- Provide the lakehouse table name in the OneLakePath_or_TableName column in control table
+  
+- If the source table doesnot have physical partitions and we need parrallel copy from the table then we can enable Dynamic range partition option , Refer below image for details , partition column parameters are listed below 
+
+<img width="778" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/594b8f80-4744-46c7-b275-1a379842bc3b">
+
+        @pipeline().parameters.PartitionColumnName , 
+        @pipeline().parameters.PartitionUpperBound
+        @pipeline().parameters.PartitionLowerBound
+
+-  Log sucess and Failures , Refer to CDC copy section for complete details on these steps 
