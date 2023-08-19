@@ -341,7 +341,7 @@ The High level flow  involves the following steps:
          SELECT * FROM cdc.fn_cdc_get_all_changes_',pipeline().parameters.SchemaName,'_',pipeline().parameters.TableName,'(@from_lsn, @to_lsn, ''all'')')
 
 
-  - In the destination of the Copy Activity Parameterize the LakeHouse object ID and the file path to be written
+- In the destination of the Copy Activity Parameterize the LakeHouse object ID and the file path to be written
 
     <img width="800" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/de7bb4b0-851e-4ea5-8352-6e6dd29a8e81">
 
@@ -349,6 +349,24 @@ The High level flow  involves the following steps:
                 @concat(pipeline().parameters.OneLakePath,pipeline().parameters.TableName,'/','year=',formatDateTime(utcnow(),'yyyy'),'/','month=',formatDateTime(utcnow(),'MM'),'/','day=',formatDateTime(utcnow(),'dd'),'/',pipeline().parameters.UniqueID)
           
 
+- Update the LSN value for next run uisng the Stored procedure 
+   <img width="1074" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/34735673-b387-49b4-bc9a-c3d69160fac5">
+
+- Insert the  log tables with Sucess status and the counts copied by executing the Stored Proc
+
+     <img width="866" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/f5f763b8-59c2-42cc-9efc-8f8ff792ad50">
+
+- In case of failure , Insert the  log tables with Failure status and the counts copied by executing the Stored Proc
+
+    <img width="748" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/2f21d635-d0d4-4d64-b6bb-8fd0e14c686f">
+
+- Copy the incremental files to a processing folder to be curated by notebooks in next step , this is a optional step and the bronze tables can be curated directly from the files copied in the earlier activity ,  this way you keep the actual data landed from Source SQL for logging , auditing , debugging needs and curation can be done as a seperate process
 
 
-     
+  <img width="887" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/0605952c-2ef5-43da-8a24-db9968801086">
+
+  Source and destination file path configurations are as below
+
+            @concat(pipeline().parameters.OneLakePath,pipeline().parameters.TableName,'/','year=',formatDateTime(utcnow(),'yyyy'),'/','month=',formatDateTime(utcnow(),'MM'),'/','day=',formatDateTime(utcnow(),'dd'),'/',pipeline().parameters.UniqueID)
+
+          @concat(pipeline().parameters.ProcessingPath,pipeline().parameters.TableName)
