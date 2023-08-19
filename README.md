@@ -218,7 +218,9 @@ The High level flow  involves the following steps:
        GO
 
 
-##### Configure the control table records
+##### Configure the tables to be ingested 
+
+- 
 
 
 
