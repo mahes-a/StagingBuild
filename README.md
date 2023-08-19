@@ -37,7 +37,7 @@ The High level flow  involves the following steps:
 
 ## Things to Note 
 
-
+- This Article assumes the Lakehouse and source tables exist and connections are established. In order to know more about how to create End to End Analytics in Fabric Lakehouse refer [here](https://github.com/mahes-a/2023/blob/main/microsoft-fabric/E2ELakeHouseMedallionOnPremOLTP.md)
 
 
 ## Steps
