@@ -480,10 +480,25 @@ The High level flow  involves the following steps:
                          "type": "string"
                      }
                  },
-  - Lookup the previous stored and current watermark values
+- Lookup the previous stored and current watermark values
 
     <img width="578" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/be646351-be19-4e13-a9ab-eb7572c3a0b4">
 
              Previous watermark value lookup - select * from dbo.table_store_watermark_value where TableName='@{concat(pipeline().parameters.SchemaName,'.', pipeline().parameters.TableName)}'
 
              Current watermark value lookup - select MAX(@{pipeline().parameters.WaterMarkColumnName}) as NewWatermarkvalue from @{concat(pipeline().parameters.SchemaName,'.', pipeline().parameters.TableName)}
+
+- Copy the incremental data between the watermark values
+
+  <img width="722" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/cfdfb894-93a4-4a75-b29a-fa36742b4a96">
+
+            Copy Source query - select * from @{concat(pipeline().parameters.SchemaName,'.', pipeline().parameters.TableName)} where @{pipeline().parameters.WaterMarkColumnName} > '@{activity('Lookup Previous Watermark Value').output.firstRow.WatermarkValue}' and @{pipeline().parameters.WaterMarkColumnName} <= '@{activity('Lookup Current Watermark Value').output.firstRow.NewWatermarkvalue}'
+
+
+            Destination File path - @concat(pipeline().parameters.OneLakePath,pipeline().parameters.TableName,'/','year=',formatDateTime(utcnow(),'yyyy'),'/','month=',formatDateTime(utcnow(),'MM'),'/','day=',formatDateTime(utcnow(),'dd'),'/',pipeline().parameters.UniqueID)
+
+- Update the Latest watermark value to tables by executing the SP
+
+     <img width="754" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/529eb8c8-8ecf-4d3f-b0d2-046ada5428bf">
+
+     
