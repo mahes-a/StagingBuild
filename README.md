@@ -669,7 +669,7 @@ The High level flow  involves the following steps:
               ) \
               .execute()
 
-- Renove the files processed
+- Remove the files processed
 
           #remove the files for current table  after processing to avoid re-processing
         from notebookutils import mssparkutils
