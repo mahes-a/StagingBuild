@@ -244,7 +244,12 @@ The High level flow  involves the following steps:
 
   <img width="841" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/702b945c-2a30-4064-b443-f6a89a14ecb7">
 
- 
+ - The paths where the files to be landed for processing in one lake should be configured , these paths are relative and can be for example "/tobeprocessed/cdc/"
+
+ - The control table would be as below after configuration
+
+   <img width="1193" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/29b062d4-364c-498b-86d9-baae9bbc68fa">
+
 ##### Function App Configurations 
 
 ##### Creating the API and arithmetic functions
