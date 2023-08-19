@@ -1,4 +1,4 @@
-# Microsoft Fabric Scalable and Efficient Data Lake Hydration: Bronze Layer Curation for Change Tracking, CDC, and Watermark Change Capture Mechanisms  #
+# Microsoft Fabric Scalable and Efficient Data Lake Hydration: Bronze Layer Curation for Full, Change Tracking, CDC, and Watermark Change Capture Mechanisms  #
 
 TBD
 
