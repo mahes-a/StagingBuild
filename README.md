@@ -45,6 +45,8 @@ The High level flow  involves the following steps:
 
 **MetaData SQL Configurations**
 
+-  Create the Artifacts required for the Metadata driven ingestion by follwoing below steps
+   
 - Below is a sample schema for the configutaion table to store the tables to be ingested
 
    
@@ -216,9 +218,10 @@ The High level flow  involves the following steps:
        GO
 
 
-##### Creating Function App 
+##### Configure the control table records
 
-- The Sample uses Python Azure Functions developed in Visual Studio Code , Please refer [here](https://learn.microsoft.com/en-us/azure/azure-functions/functions-develop-vs-code?tabs=python) on how to create , add triggers and deploy azure functions via VS code
+
+
 
 ##### Function App Configurations 
 - Configure the keys and endpoints in local.settings.json
