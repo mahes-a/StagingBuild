@@ -554,3 +554,49 @@ The High level flow  involves the following steps:
         @pipeline().parameters.PartitionLowerBound
 
 -  Log sucess and Failures , Refer to CDC copy section for complete details on these steps 
+
+**Create Notebooks to Curate Bronze Layer Tables**
+
+- we have created the incremental Parquet files from different change capture mechanism
+  
+- Each change capture mechanism has different schema in parquet files
+  
+-  Change Tracking , CDC can track deletes while Watermark cannot track deletes
+  
+-  We will create a generic notebook for each change capture mechanism to curate the Bronze layer table with Upserts and Deletes
+  
+-  The Notebooks would use the same metadata driven tables to curate the bronze tables
+
+##### Creating the Bronze Curation For CDC Files 
+
+- Browse to your Fabric enabled workspace in Power Bi and switch to Data Engineering and create a new notebook
+
+<img width="820" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/7016169e-5255-4fea-af66-36b2c48fb928">
+
+
+- Name the notebook related to CDC curation exacmple "GenericCurationCDC"
+
+- Create the parameters for the notebook in the cell 
+
+<img width="412" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/3e0a0440-e7ec-4aaa-88d6-355c71532574">
+
+
+           #parameters
+         processing_path= ""
+         table_name= ""
+         target_lakehousetablename= ""
+         primaryKeyColumn= ""
+         lakehousename=""
+
+- Import neccassary packages and set configurations
+
+          from delta.tables import *
+        from pyspark.sql.window import Window
+        from pyspark.sql.functions import row_number
+        from pyspark.sql.functions import rank
+        from pyspark.sql.functions import desc
+
+                #configure vorder for Performance
+        spark.conf.set("spark.sql.parquet.vorder.enabled", "true")
+        spark.conf.set("spark.microsoft.delta.optimizeWrite.enabled", "true")
+        spark.conf.set("spark.microsoft.delta.optimizeWrite.binSize", "1073741824")
