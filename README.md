@@ -47,7 +47,7 @@ The High level flow  involves the following steps:
 
 - Below is a sample schema for the configutaion table to store the tables to be ingested
 
-           - 
+   
          CREATE TABLE [dbo].[ControlTable](
          	[TableID] [int] IDENTITY(1,1) NOT NULL,
          	[SourceTableName] [varchar](255) NULL,
@@ -85,7 +85,137 @@ The High level flow  involves the following steps:
         ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
         GO
 
-- 
+-  Below is a sample schema for storing the last changed version for Watermark , CDC , Change Tracking
+  
+        CREATE TABLE [dbo].[table_store_watermark_value](
+        	[ServerName] [varchar](255) NULL,
+        	[TableName] [varchar](255) NULL,
+        	[WatermarkValue] [datetime] NULL
+        ) ON [PRIMARY]
+        GO
+
+        CREATE TABLE [dbo].[table_store_ChangeTracking_version](
+        	[TableName] [varchar](255) NULL,
+        	[SYS_CHANGE_VERSION] [bigint] NULL
+        ) ON [PRIMARY]
+        GO
+        
+        CREATE TABLE [dbo].[table_store_CDC_version](
+        	[ServerName] [varchar](255) NULL,
+        	[TableName] [varchar](255) NULL,
+        	[CDCLastRun] [varchar](255) NULL
+        ) ON [PRIMARY]
+        GO
+
+-  Below are stored procedures that can upsert in to above mentioned tables
+
+      
+       CREATE PROCEDURE [dbo].[InsertLog]
+       (
+           -- Add the parameters for the stored procedure here
+            @ServerName   varchar (100) NULL,
+       	 @DbName   varchar (100) NULL,
+       	 @TableName   varchar (100) NULL,
+       	 @RunStatus   varchar (50) NULL,
+       	 @SourceCount   bigint  NULL,
+       	 @BronzeCount   bigint  NULL,
+       	 @error varchar(max)
+       )
+       AS
+       BEGIN
+           -- SET NOCOUNT ON added to prevent extra result sets from
+           -- interfering with SELECT statements.
+           SET NOCOUNT ON
+       
+       
+       
+       INSERT INTO  dbo.IngestionLog 
+                  ( ServerName 
+                  , DbName 
+                  , TableName 
+                  , RunStatus 
+                  , SourceCount 
+                  , BronzeCount 
+       		   ,ErrorMessage
+                  , UpdateDate )
+            VALUES
+                  (@ServerName,  
+                  @DbName,  
+                  @TableName,  
+                  @RunStatus,
+                  @SourceCount,
+                  @BronzeCount, 
+       		   @error,
+                  GETDATE())
+       
+       
+       
+       
+       END
+       
+     
+       SET ANSI_NULLS ON
+       GO
+       SET QUOTED_IDENTIFIER ON
+       GO
+       
+       CREATE PROCEDURE [dbo].[Update_CDCLSN_Version]  @serverName varchar(255), @TableName varchar(255), @lsn varchar(50)
+       AS
+       BEGIN
+       
+       IF EXISTS(SELECT 1 FROM dbo.table_store_CDC_version WHERE ServerName = @serverName and TableName=@TableName)
+            UPDATE dbo.table_store_CDC_version 
+            set [CDCLastRun] = @lsn
+       	 where ServerName = @serverName and TableName=@TableName
+       ELSE
+            INSERT INTO dbo.table_store_CDC_version
+                 (ServerName, TableName, CDCLastRun)
+            VALUES
+                 (@serverName,@TableName,@lsn)
+       
+       
+       END
+       
+     
+       SET ANSI_NULLS ON
+       GO
+       SET QUOTED_IDENTIFIER ON
+       GO
+       CREATE PROCEDURE [dbo].[Update_ChangeTracking_Version] @CurrentTrackingVersion BIGINT, @TableName varchar(50)
+       AS
+       BEGIN
+       UPDATE table_store_ChangeTracking_version
+       SET [SYS_CHANGE_VERSION] = @CurrentTrackingVersion
+       WHERE [TableName] = @TableName
+       END
+       GO
+      
+       SET ANSI_NULLS ON
+       GO
+       SET QUOTED_IDENTIFIER ON
+       GO
+       
+       
+       CREATE PROCEDURE [dbo].[Update_WaterMark_Value]  @serverName varchar(255), @TableName varchar(255), @watermark datetime
+       AS
+       BEGIN
+       
+       IF EXISTS(SELECT 1 FROM dbo.table_store_watermark_value WHERE ServerName = @serverName and TableName=@TableName)
+            UPDATE dbo.table_store_watermark_value 
+            set [WatermarkValue] = @watermark
+       	 where ServerName = @serverName and TableName=@TableName
+       ELSE
+            INSERT INTO dbo.table_store_watermark_value
+                 (ServerName, TableName, WatermarkValue)
+            VALUES
+                 (@serverName,@TableName,@watermark)
+       
+       
+       END
+       
+       GO
+
+
 ##### Creating Function App 
 
 - The Sample uses Python Azure Functions developed in Visual Studio Code , Please refer [here](https://learn.microsoft.com/en-us/azure/azure-functions/functions-develop-vs-code?tabs=python) on how to create , add triggers and deploy azure functions via VS code
