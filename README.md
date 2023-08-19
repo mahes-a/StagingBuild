@@ -228,7 +228,7 @@ The High level flow  involves the following steps:
   -  PartitionColumnName would denote the partition column that the pipeline can use to select in multiple threads
   -  PartitionLowerBound and PartitionUpperBound denote the upper and lower bound for the parallel copy 
 
-- Refer [here])(https://learn.microsoft.com/en-us/azure/data-factory/connector-sql-server?tabs=data-factory#parallel-copy-from-sql-database) to understand various parrallel copy partition options  
+- Refer [here](https://learn.microsoft.com/en-us/azure/data-factory/connector-sql-server?tabs=data-factory#parallel-copy-from-sql-database) to understand various parrallel copy partition options  
 
 
 ##### Function App Configurations 
