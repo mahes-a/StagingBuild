@@ -220,9 +220,15 @@ The High level flow  involves the following steps:
 
 ##### Configure the tables to be ingested 
 
-- 
+- Insert the tables to be ingested in the control table
+  
+- The Copy Mode indicates the nature of copy - CDC , CHANGE TRACKING , Full , WATERMARK are the values to be configured
+  
+- For Full copy mechanism where count of rows to be copied can be very high , we can enable parrallel data copy using the Partition column names
+  -  PartitionColumnName would denote the partition column that the pipeline can use to select in multiple threads
+  -  PartitionLowerBound and PartitionUpperBound denote the upper and lower bound for the parallel copy 
 
-
+- Refer [here])(https://learn.microsoft.com/en-us/azure/data-factory/connector-sql-server?tabs=data-factory#parallel-copy-from-sql-database) to understand various parrallel copy partition options  
 
 
 ##### Function App Configurations 
