@@ -436,3 +436,8 @@ The High level flow  involves the following steps:
 
             Destination file path would be @concat(pipeline().parameters.OneLakePath,pipeline().parameters.TableName,'/','year=',formatDateTime(utcnow(),'yyyy'),'/','month=',formatDateTime(utcnow(),'MM'),'/','day=',formatDateTime(utcnow(),'dd'),'/',pipeline().parameters.UniqueId)
 
+- Update the current change tracking version to config tables for next run
+
+    <img width="668" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/9d88627f-87c3-46d9-82e6-d4cc37ef09c5">
+
+ - Log sucess and Failures and copy the file for further curation , Refer to CDC copy section for complete details on these steps 
