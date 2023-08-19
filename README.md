@@ -370,3 +370,16 @@ The High level flow  involves the following steps:
             @concat(pipeline().parameters.OneLakePath,pipeline().parameters.TableName,'/','year=',formatDateTime(utcnow(),'yyyy'),'/','month=',formatDateTime(utcnow(),'MM'),'/','day=',formatDateTime(utcnow(),'dd'),'/',pipeline().parameters.UniqueID)
 
           @concat(pipeline().parameters.ProcessingPath,pipeline().parameters.TableName)
+
+##### Creating the Generic Change Tracking Load Pipeline
+
+- Browse to your Fabric enabled workspace in Power Bi and switch to Data Factory and create a new pipeline
+
+  <img width="388" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/5d27b4f1-b4a0-4ff0-9483-f6babc7b0cf6">
+
+- Name the Pipeline related to Change Tracking , For example "PL_Generic_SQL_CHANGETRACKING"
+
+- For understanding the flow of the pipeline refer [here](https://learn.microsoft.com/en-us/azure/data-factory/tutorial-incremental-copy-overview#delta-data-loading-from-sql-db-by-using-the-change-tracking-technology)
+
+- 
+  
