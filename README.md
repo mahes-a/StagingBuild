@@ -232,11 +232,19 @@ The High level flow  involves the following steps:
 
 - In order to configure the Target Lakehouse file location and the target lakehouse in fabric follow below steps
   
-  -  To retrieve the LakeHouseName , Select any table or file within the fabric lakehouse and click on properties and select the ABFS path until the lakehouse name , the format would be abfss://<workspacename>@<tenanttname>-onelake.dfs.fabric.microsoft.com/<lakehousename>.Lakehouse
+-  To retrieve the LakeHouseName , Select any table or file within the fabric lakehouse and click on properties and select the ABFS path until the lakehouse name , the format would be abfss://<workspacename>@<tenanttname>-onelake.dfs.fabric.microsoft.com/<lakehousename>.Lakehouse
 
       <img width="439" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/0248e8ff-efd7-4d68-8d7a-73968aff4132">
 
+ -  One way to retreive the lakehouse artifcat id to enable run time  Lakehouse sink creation , create a data pipeline and drag a copy activity and chose the lakehouse and view code the Json code would provide the artifactId for Lakehouse which needs to configured in LakehouseArtifactID column
+   
+ 
+  <img width="628" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/54d50fc5-d1ea-42ee-9db3-1cc89344ad6e">
 
+
+  <img width="841" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/702b945c-2a30-4064-b443-f6a89a14ecb7">
+
+ 
 ##### Function App Configurations 
 
 ##### Creating the API and arithmetic functions
