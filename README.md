@@ -19,7 +19,7 @@ The High level flow  involves the following steps:
 
 - Generic Pyspark notebooks that can Upsert and Delete for each incremental data copy mechanism (Change Capture , CDC , Watermark) are created.
 
-- Orchestration pipeline executes the ingestion and curation notebook for each incremental data copy mechanism (Change Capture , CDC , Watermark)
+- Orchestration pipeline is designed to execute the ingestion and curation notebook for each incremental data copy mechanism (Change Capture , CDC , Watermark)
 
 - Orchestration reads from the control table and for each table to be ingested the corresponding ingestion pipeline and curation notebook are executed.
 
