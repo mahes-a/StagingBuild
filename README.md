@@ -441,3 +441,49 @@ The High level flow  involves the following steps:
     <img width="668" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/9d88627f-87c3-46d9-82e6-d4cc37ef09c5">
 
  - Log sucess and Failures and copy the file for further curation , Refer to CDC copy section for complete details on these steps 
+
+##### Creating the Generic Watermark Load Pipeline
+
+- Browse to your Fabric enabled workspace in Power Bi and switch to Data Factory and create a new pipeline
+
+  <img width="388" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/5d27b4f1-b4a0-4ff0-9483-f6babc7b0cf6">
+
+- Name the Pipeline related to Change Tracking , For example "PL_GENERIC_INGEST_WATERMARK"
+
+- For understanding the flow of the pipeline refer [here](https://learn.microsoft.com/en-us/azure/data-factory/tutorial-incremental-copy-overview#delta-data-loading-from-database-by-using-a-watermark)
+  
+- Parameters for the pipeline are as below
+
+           "parameters": {
+                     "TableName": {
+                         "type": "String"
+                     },
+                     "SchemaName": {
+                         "type": "string"
+                     },
+                     "LakeHouseName": {
+                         "type": "string"
+                     },
+                     "OneLakePath": {
+                         "type": "string"
+                     },
+                     "DeltaColumnName": {
+                         "type": "string"
+                     },
+                     "WaterMarkColumnName": {
+                         "type": "string"
+                     },
+                     "ProcessingPath": {
+                         "type": "String"
+                     },
+                     "UniqueID": {
+                         "type": "string"
+                     }
+                 },
+  - Lookup the previous stored and current watermark values
+
+    <img width="578" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/be646351-be19-4e13-a9ab-eb7572c3a0b4">
+
+             Previous watermark value lookup - select * from dbo.table_store_watermark_value where TableName='@{concat(pipeline().parameters.SchemaName,'.', pipeline().parameters.TableName)}'
+
+             Current watermark value lookup - select MAX(@{pipeline().parameters.WaterMarkColumnName}) as NewWatermarkvalue from @{concat(pipeline().parameters.SchemaName,'.', pipeline().parameters.TableName)}
