@@ -250,12 +250,48 @@ The High level flow  involves the following steps:
 
    <img width="1193" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/29b062d4-364c-498b-86d9-baae9bbc68fa">
 
-##### Function App Configurations 
+##### Building Generic Ingestion Pipelines
 
-##### Creating the API and arithmetic functions
+#### Note:- The Idea to create individual pipelines to handle Full and other change capture mechanism is to adress seperation of concerns , flexibility in deployment and ease of maintenance 
 
-#### Note:- The Function calling code is Inspired and Adapted from [MS learn Function calling Article](https://learn.microsoft.com/en-us/azure/ai-services/openai/how-to/function-calling) and [working_with_functions.ipynb](https://github.com/Azure-Samples/openai/blob/main/Basic_Samples/Functions/working_with_functions.ipynb)
-- In your function App add all the functions with API calls
+##### Creating the Generic CDC Load Pipeline
+
+- Browse to your Fabric enabled workspace in Power Bi and switch to Data Factory and create a new pipeline
+
+  <img width="388" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/5d27b4f1-b4a0-4ff0-9483-f6babc7b0cf6">
+
+- Name the Pipeline related to CDC , For example "PL_GENERIC_SQL_CDC_INGEST"
+  
+- Add the parameters required for the pipeline , all these parameters will be read from the control and the CDC version table
+
+          "parameters": {
+                   "TableName": {
+                       "type": "string"
+                   },
+                   "SchemaName": {
+                       "type": "string"
+                   },
+                   "LakeHouseName": {
+                       "type": "string"
+                   },
+                   "OneLakePath": {
+                       "type": "string"
+                   },
+                   "LSNStartTime": {
+                       "type": "string"
+                   },
+                   "LSNEndTime": {
+                       "type": "string"
+                   },
+                   "ProcessingPath": {
+                       "type": "string"
+                   },
+                   "UniqueID": {
+                       "type": "string"
+                   }
+        
+- d
+  
   
 - We have below  functions
   -  Get current time for a location using pytz
