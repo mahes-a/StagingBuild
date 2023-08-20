@@ -57,7 +57,7 @@ The High level flow  involves the following steps:
 
 - This Article assumes the Lakehouse and source tables exist and connections are established. In order to know more about how to create End to End Analytics in Fabric Lakehouse refer [here](https://github.com/mahes-a/2023/blob/main/microsoft-fabric/E2ELakeHouseMedallionOnPremOLTP.md)
 
-- Metadata driven pipelines are available as part of ADF and refer [here](https://learn.microsoft.com/en-us/azure/data-factory/copy-data-tool-metadata-driven) to learn more
+-  Refer [here](https://learn.microsoft.com/en-us/azure/data-factory/copy-data-tool-metadata-driven) to learn more on Metadata driven pipelines
 
 - To understand more about the various change capture mechanisms and the logic to ingest the incremental rows can be found [here](https://learn.microsoft.com/en-us/azure/data-factory/tutorial-incremental-copy-change-data-capture-feature-portal) 
   
