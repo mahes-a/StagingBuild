@@ -25,7 +25,7 @@ The High level flow  involves the following steps:
 
   -  For example , If the table to be ingested has CDC has the change capture mechanism then CDC Ingestion and Bronze layer curation notebook is executed
   
-- The Orchestration pipeline executes the ingestion and curation in a parrallel fashion for each table to ingested
+- The Orchestration pipeline executes the ingestion and curation in a parallel fashion for each table to ingested
 
 
 ## Prerequisites
@@ -50,9 +50,9 @@ The High level flow  involves the following steps:
 
 **MetaData SQL Configurations**
 
--  Create the Artifacts required for the Metadata driven ingestion by follwoing below steps
+-  Create the Artifacts required for the Metadata driven ingestion by following below steps
    
-- Below is a sample schema for the configutaion table to store the tables to be ingested
+- Below is a sample schema for the configuration table to store the tables to be ingested
 
    
          CREATE TABLE [dbo].[ControlTable](
@@ -229,11 +229,11 @@ The High level flow  involves the following steps:
   
 - The Copy Mode indicates the nature of copy - CDC , CHANGE TRACKING , Full , WATERMARK are the values to be configured
   
-- For Full copy mechanism where count of rows to be copied can be very high , we can enable parrallel data copy using the Partition column names
+- For Full copy mechanism where count of rows to be copied can be very high , we can enable parallel data copy using the Partition column names
   -  PartitionColumnName would denote the partition column that the pipeline can use to select in multiple threads
   -  PartitionLowerBound and PartitionUpperBound denote the upper and lower bound for the parallel copy 
 
-- Refer [here](https://learn.microsoft.com/en-us/azure/data-factory/connector-sql-server?tabs=data-factory#parallel-copy-from-sql-database) to understand various parrallel copy partition options  
+- Refer [here](https://learn.microsoft.com/en-us/azure/data-factory/connector-sql-server?tabs=data-factory#parallel-copy-from-sql-database) to understand various parallel copy partition options  
 
 - In order to configure the Target Lakehouse file location and the target lakehouse in fabric follow below steps
   
@@ -259,7 +259,7 @@ The High level flow  involves the following steps:
 
 ##### Building Generic Ingestion Pipelines
 
-#### Note:- The Idea to create individual pipelines to handle Full and other change capture mechanism is to adress seperation of concerns , flexibility in deployment and ease of maintenance 
+#### Note:- The Idea to create individual pipelines to handle Full and other change capture mechanism is to address separation of concerns , flexibility in deployment and ease of maintenance 
 
 ##### Creating the Generic CDC Load Pipeline
 
@@ -274,7 +274,7 @@ The High level flow  involves the following steps:
  -  Use the CDC function fn_cdc_get_all_changes_  or fn_cdc_get_net_changes_  to retrieve the delta between the previous run and current run
  -  Copy the delta data into Parquet files and make a transient copy to processing folder
  -  The copy of processing folder will be deleted after curation , this way you keep the actual data landed from Source SQL for logging , auditing , debugging needs
- -  Update the ingestion log and the CDC LSN table to store the latest sucessful LSN value for next run 
+ -  Update the ingestion log and the CDC LSN table to store the latest successful LSN value for next run 
   
 - Add the parameters required for the pipeline , all these parameters will be read from the control and the CDC version table
 
@@ -304,7 +304,7 @@ The High level flow  involves the following steps:
                        "type": "string"
                    }
         
-- Create lookup activity to retreive the last run LSN from LSN Table
+- Create lookup activity to retrieve the last run LSN from LSN Table
 
 
   <img width="512" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/687b16bc-5bea-4ff7-ac97-cb42ef0fb4ef">
@@ -321,7 +321,7 @@ The High level flow  involves the following steps:
              SET @to_lsn = sys.fn_cdc_map_time_to_lsn(''largest less than or equal'', @end_time);
              SELECT count(1) changecount FROM cdc.fn_cdc_get_net_changes_',pipeline().parameters.SchemaName,'_',pipeline().parameters.TableName,'(@from_lsn, @to_lsn,   ''all'')')
   
-- Add a if condiiton and only if there are count of records to ingest then we will have to copy the records
+- Add an if condition and only if there are count of records to ingest then we will have to copy the records
 
 
   <img width="781" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/9bc65640-b1a5-4813-b7ba-13e16b502572">
@@ -330,7 +330,7 @@ The High level flow  involves the following steps:
         @greater(int(activity('Get CDC Change Count').output.firstRow.changecount),0)
 
 
-- Within the True section of the If activity , Copying of the delta data and upadting the logs and LSN values happen
+- Within the True section of the If activity , Copying of the delta data and updating the logs and LSN values happen
 
   <img width="784" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/c51ba082-710b-404a-8706-371c91258f37">
 
@@ -354,10 +354,10 @@ The High level flow  involves the following steps:
                 @concat(pipeline().parameters.OneLakePath,pipeline().parameters.TableName,'/','year=',formatDateTime(utcnow(),'yyyy'),'/','month=',formatDateTime(utcnow(),'MM'),'/','day=',formatDateTime(utcnow(),'dd'),'/',pipeline().parameters.UniqueID)
           
 
-- Update the LSN value for next run uisng the Stored procedure 
+- Update the LSN value for next run using the Stored procedure 
    <img width="1074" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/34735673-b387-49b4-bc9a-c3d69160fac5">
 
-- Insert the  log tables with Sucess status and the counts copied by executing the Stored Proc
+- Insert the  log tables with Success status and the counts copied by executing the Stored Proc
 
      <img width="866" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/f5f763b8-59c2-42cc-9efc-8f8ff792ad50">
 
@@ -365,7 +365,7 @@ The High level flow  involves the following steps:
 
     <img width="748" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/2f21d635-d0d4-4d64-b6bb-8fd0e14c686f">
 
-- Copy the incremental files to a processing folder to be curated by notebooks in next step , this is a optional step and the bronze tables can be curated directly from the files copied in the earlier activity ,  this way you keep the actual data landed from Source SQL for logging , auditing , debugging needs and curation can be done as a seperate process
+- Copy the incremental files to a processing folder to be curated by notebooks in next step , this is a optional step and the bronze tables can be curated directly from the files copied in the earlier activity ,  this way you keep the actual data landed from Source SQL for logging , auditing , debugging needs and curation can be done as a separate process
 
 
   <img width="887" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/0605952c-2ef5-43da-8a24-db9968801086">
@@ -506,7 +506,7 @@ The High level flow  involves the following steps:
 
      <img width="754" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/529eb8c8-8ecf-4d3f-b0d2-046ada5428bf">
 
- - Log sucess and Failures and copy the file for further curation , Refer to CDC copy section for complete details on these steps 
+ - Log success and Failures and copy the file for further curation , Refer to CDC copy section for complete details on these steps 
 
 ##### Creating the Generic Full Load Pipeline
 
@@ -550,7 +550,7 @@ The High level flow  involves the following steps:
   
 - Provide the lakehouse table name in the OneLakePath_or_TableName column in control table
   
-- If the source table doesnot have physical partitions and we need parrallel copy from the table then we can enable Dynamic range partition option , Refer below image for details , partition column parameters are listed below 
+- If the source table does not have physical partitions and we need parallel copy from the table then we can enable Dynamic range partition option , Refer below image for details , partition column parameters are listed below 
 
 <img width="778" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/594b8f80-4744-46c7-b275-1a379842bc3b">
 
@@ -558,7 +558,7 @@ The High level flow  involves the following steps:
         @pipeline().parameters.PartitionUpperBound
         @pipeline().parameters.PartitionLowerBound
 
--  Log sucess and Failures , Refer to CDC copy section for complete details on these steps 
+-  Log success and Failures , Refer to CDC copy section for complete details on these steps 
 
 **Create Notebooks to Curate Bronze Layer Tables**
 
@@ -580,7 +580,7 @@ The High level flow  involves the following steps:
 
 
 
-- Name the notebook related to CDC curation exacmple "GenericCurationCDC"
+- Name the notebook related to CDC curation example "GenericCurationCDC"
 
 - Create the parameters for the notebook in the cell 
 
@@ -627,7 +627,7 @@ The High level flow  involves the following steps:
 - Create Dataframes that contain data for Updates , Deletes , Inserts from CDC files
 
          
-           #This filters and saves the Insert data to a separate dataframe
+           #This filters and saves the Insert data to a separate data frame
          inserted_rows_df = df_sqlcdc.filter("operation = '2'")
          windowSpec = Window.partitionBy(primaryKeyColumn).orderBy(
                  desc("seqval")
@@ -691,7 +691,7 @@ The High level flow  involves the following steps:
 
 
 
-- Name the notebook related to Change Tracking curation exacmple "GenericCurationCH"
+- Name the notebook related to Change Tracking curation example "GenericCurationCH"
 
 - Create the parameters for the notebook in the cell 
 
@@ -816,7 +816,7 @@ The High level flow  involves the following steps:
               watermarkKeyColumn=""
               lakehousename=""
 
-- Import neccassary packages and set configurations
+- Import necessary packages and set configurations
 
           from delta.tables import *
         from pyspark.sql.window import Window
@@ -880,14 +880,14 @@ The High level flow  involves the following steps:
   
  ##### Create the Orchestration Pipeline to execute the notebooks 
 
-*The idea behind having seperate pipeline for neotebook execution is to speretae the ingestion from curation* 
+*The idea behind having separate pipeline for notebook execution is to separate the ingestion from curation* 
  - Browse to your Fabric enabled workspace in Power Bi and switch to Data Factory and create a new pipeline
 
   <img width="388" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/5d27b4f1-b4a0-4ff0-9483-f6babc7b0cf6">
 
 - Name the Pipeline related to Bronze Curation , For example "PL_Curate_Bronze"
   
-- Lookup the tables which have succesful ingestion completed and ready to curated.
+- Lookup the tables which have successful ingestion completed and ready to curated.
 
  <img width="703" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/06f6c6c9-8d0f-498d-9f3f-f7dbed7637f5">
 
@@ -899,13 +899,13 @@ The High level flow  involves the following steps:
            
            and CAST(UpdateDate as date) >= CAST(GETDATE() As Date) 
 
-- Add a Foreach actvity to curate each table
+- Add a Foreach activity to curate each table
 
 <img width="451" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/f09574c9-572d-4e6a-8491-c2e1fa2c97d1">
 
          Items property would be @activity('Lookup Config Table').output.value
 
-- Within the For Each Actvity add a switch actvity based on the copymode  to switch and execute the corresponding  notebooks created in previous section
+- Within the For Each Actvity add a switch activity based on the copymode  to switch and execute the corresponding  notebooks created in previous section
     -  Example if CopyMode is WATERMARK then Execute the Watermark notebook by passing the parameters , Execute CDC , Change Tracking notebooks in a similar fashion
               @item().CopyMode
  
@@ -975,13 +975,13 @@ The High level flow  involves the following steps:
           SELECT *
           FROM dbo.ControlTable where isActive='Y'
 
-- Add a Foreach actvity to copy data from each table in a parrallel fashion
+- Add a Foreach activity to copy data from each table in a parallel fashion
 
    <img width="1045" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/47c42a3e-01d9-408b-b830-de2acc06a63f">
 
          @activity('Get Tables to Load from Config').output.value
  
- - Within the For Each Actvity add a switch actvity based on the copymode and based on copymode execute corresponding pipeline created in previous steps , Ensure Wait on completion is checked to force the activity to wait until completion 
+ - Within the For Each Activity add a switch activity based on the copymode and based on copymode execute corresponding pipeline created in previous steps , Ensure Wait on completion is checked to force the activity to wait until completion 
    
     -  For Example if the copymode is CDC then execute the CDC ingestion pipeline
   
