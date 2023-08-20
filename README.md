@@ -875,6 +875,7 @@ The High level flow  involves the following steps:
   
  ##### Create the Orchestration Pipeline to execute the notebooks 
 
+*The idea behind having seperate pipeline for neotebook execution is to speretae the ingestion from curation* 
  - Browse to your Fabric enabled workspace in Power Bi and switch to Data Factory and create a new pipeline
 
   <img width="388" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/5d27b4f1-b4a0-4ff0-9483-f6babc7b0cf6">
@@ -953,4 +954,24 @@ The High level flow  involves the following steps:
                                                             "type": "string"
                                                         }
                                                     },
-     -                                                    
+                                                    
+ ##### Create the Orchestration Pipeline to execute the Ingestion and notebooks 
+
+- Browse to your Fabric enabled workspace in Power Bi and switch to Data Factory and create a new pipeline
+
+  <img width="388" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/5d27b4f1-b4a0-4ff0-9483-f6babc7b0cf6">
+
+- Name the Pipeline related to Ingestion and Bronze Curation , For example "PL_Generic_Ingestion_Executor"
+  
+- Lookup the tables which are ready to be ingested
+
+  <img width="981" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/818fcebf-1c0e-4149-b5c1-2f65b46fb25d">
+        
+          SELECT *
+          FROM dbo.ControlTable where isActive='Y'
+
+- Add a Foreach actvity to copy data from each table in a parrallel fashion
+
+   <img width="1045" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/47c42a3e-01d9-408b-b830-de2acc06a63f">
+
+         @activity('Get Tables to Load from Config').output.value
