@@ -1,6 +1,21 @@
 # Microsoft Fabric Scalable and Efficient OneLake Hydration: Bronze Layer Curation for Full, Change Tracking, CDC, and Watermark Change Capture Mechanisms  #
 
-TBD
+In today's data-driven world, organizations need efficient and adaptable data pipelines to process and derive insights from vast amounts of information. One powerful approach is to leverage change tracking, CDC, and watermark change capture mechanisms. These mechanisms enable incremental data loading, real-time or near-real-time data availability, and improved scalability. In this blog, we explore the steps of implementing a generic data pipeline that incorporates these mechanisms and how it can revolutionize your data processing workflows in Fabric
+
+Benefits of a Generic Pipeline:
+
+-  Enhanced Efficiency: By capturing and processing only the changes made to the data, the pipeline reduces processing time and resource consumption, resulting in faster data loading and improved performance.
+
+- Real-time Data Availability: Change tracking, CDC, and watermark change capture mechanisms ensure that the most recent data is readily available for analysis and decision-making, empowering organizations to make timely and informed choices.
+  
+- Incremental Data Loading: The pipeline processes only the newly added or modified data, eliminating the need to reload the entire dataset. This reduces processing time and minimizes the impact on system resources.
+  
+- Data Accuracy and Consistency: Capturing changes at the source level ensures data integrity and consistency throughout the pipeline, avoiding inconsistencies that may arise from manual or batch-based data updates.
+  
+- Flexibility and Adaptability: A generic pipeline can seamlessly handle different data sources and formats, allowing for easy integration of new sources or modifications without significant changes to the pipeline architecture.
+  
+- Scalability: By efficiently handling large volumes of data and increasing data velocity, the pipeline can scale effortlessly, ensuring smooth operations and minimal disruptions.
+
 
 ## High-level Architecture
 
