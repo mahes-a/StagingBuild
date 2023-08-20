@@ -975,3 +975,55 @@ The High level flow  involves the following steps:
    <img width="1045" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/47c42a3e-01d9-408b-b830-de2acc06a63f">
 
          @activity('Get Tables to Load from Config').output.value
+ 
+ - Within the For Each Actvity add a switch actvity based on the copymode and based on copymode execute corresponding pipeline created in previous steps , Ensure Wait on completion is checked to force the activity to wait until completion 
+   
+    -  For Example if the copymode is CDC then execute the CDC ingestion pipeline
+  
+      <img width="1069" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/9052ac4d-944b-4a7d-a53f-e4e6ff17dc9b">
+      
+       <img width="876" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/8b78a695-e43b-490d-9a94-9b12e8d121ec">
+
+- The parameters are as below
+
+              "parameters": {
+                                                        "SchemaName": {
+                                                            "value": "@item().SchemaName",
+                                                            "type": "Expression"
+                                                        },
+                                                        "TableName": {
+                                                            "value": "@item().SourceTableName",
+                                                            "type": "Expression"
+                                                        },
+                                                        "OneLakePath_or_TableName": {
+                                                            "value": "@item().OneLakePath_or_TableName",
+                                                            "type": "Expression"
+                                                        },
+                                                        "PartitionColumnName": {
+                                                            "value": "@item().PartitionColumnName",
+                                                            "type": "Expression"
+                                                        },
+                                                        "PartitionUpperBound": {
+                                                            "value": "@item().PartitionUpperBound",
+                                                            "type": "Expression"
+                                                        },
+                                                        "PartitionLowerBound": {
+                                                            "value": "@item().PartitionLowerBound",
+                                                            "type": "Expression"
+                                                        },
+                                                        "LakeHouseName": {
+                                                            "value": "@item().LakehouseArtifactID",
+                                                            "type": "Expression"
+                                                        }
+                                                    }
+                                                }
+                                            }
+
+        <img width="890" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/8a24584c-da6a-489f-b63c-bc9a97cb6cf0">
+
+
+- Add a delay of few seconds to ensure the files are written and available for Notebooks to read
+
+- Execute the Notebook execution pipeline and send email after completion
+
+  <img width="797" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/4afd156a-492f-4fa3-a5c5-b9e063ed7315">
