@@ -872,3 +872,85 @@ The High level flow  involves the following steps:
         from notebookutils import mssparkutils
         
         mssparkutils.fs.rm(processing_filepath, True)
+  
+ ##### Create the Orchestration Pipeline to execute the notebooks 
+
+ - Browse to your Fabric enabled workspace in Power Bi and switch to Data Factory and create a new pipeline
+
+  <img width="388" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/5d27b4f1-b4a0-4ff0-9483-f6babc7b0cf6">
+
+- Name the Pipeline related to Bronze Curation , For example "PL_Curate_Bronze"
+  
+- Lookup the tables which have succesful ingestion completed and ready to curated.
+
+ <img width="703" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/06f6c6c9-8d0f-498d-9f3f-f7dbed7637f5">
+
+           SELECT distinct ctl.*
+           FROM [dbo].[IngestionLog] loging (nolock)
+           join [dbo].[ControlTable] ctl on  concat(ctl.schemaname,'.',ctl.SourceTableName) = loging.TableName
+           where RunStatus='Success' and ctl.CopyMode in ('WATERMARK',
+         'CHANGE TRACKING','CDC') and IsActive='Y'
+           
+           and CAST(UpdateDate as date) >= CAST(GETDATE() As Date) 
+
+- Add a Foreach actvity to curate each table
+
+<img width="451" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/f09574c9-572d-4e6a-8491-c2e1fa2c97d1">
+
+         Items property would be @activity('Lookup Config Table').output.value
+
+- Within the For Each Actvity add a switch actvity based on the copymode  to switch and execute the corresponding  notebooks created in previous section
+    -  Example if CopyMode is WATERMARK then Execute the Watermark notebook by passing the parameters , Execute CDC , Change Tracking notebooks in a similar fashion
+              @item().CopyMode
+ 
+  <img width="1000" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/1a81180b-c8d3-4092-a667-bd166d987e7e">
+
+
+     <img width="952" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/8198b9f3-4879-4272-97bd-4504bb4d083c">
+
+
+                    "parameters": {
+                                                        "processing_path": {
+                                                            "value": {
+                                                                "value": "@item().processingpath",
+                                                                "type": "Expression"
+                                                            },
+                                                            "type": "string"
+                                                        },
+                                                        "table_name": {
+                                                            "value": {
+                                                                "value": "@item().SourceTableName",
+                                                                "type": "Expression"
+                                                            },
+                                                            "type": "string"
+                                                        },
+                                                        "target_lakehousetablename": {
+                                                            "value": {
+                                                                "value": "@item().SourceTableName",
+                                                                "type": "Expression"
+                                                            },
+                                                            "type": "string"
+                                                        },
+                                                        "primaryKeyColumn": {
+                                                            "value": {
+                                                                "value": "@item().DeltaColumnName",
+                                                                "type": "Expression"
+                                                            },
+                                                            "type": "string"
+                                                        },
+                                                        "watermarkKeyColumn": {
+                                                            "value": {
+                                                                "value": "@item().WaterMarkColumnName",
+                                                                "type": "Expression"
+                                                            },
+                                                            "type": "string"
+                                                        },
+                                                        "lakehousename": {
+                                                            "value": {
+                                                                "value": "@item().LakeHouseName",
+                                                                "type": "Expression"
+                                                            },
+                                                            "type": "string"
+                                                        }
+                                                    },
+     -                                                    
