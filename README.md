@@ -1027,3 +1027,5 @@ The High level flow  involves the following steps:
 - Execute the Notebook execution pipeline and send email after completion
 
   <img width="797" alt="image" src="https://github.com/mahes-a/StagingBuild/assets/120069348/4afd156a-492f-4fa3-a5c5-b9e063ed7315">
+
+- The entire template is ready for testing
