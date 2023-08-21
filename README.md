@@ -63,6 +63,8 @@ The High level flow  involves the following steps:
   
 - Re-runs after failure and explicit exception handling are not added as part of this tutorial
 
+- Inspired and Adapted from [Incremental Data Copy Tutorial](https://learn.microsoft.com/en-us/azure/data-factory/tutorial-incremental-copy-overview)
+
 - Please note that this tutorial is intended for explorative and illustrative purposes only. It is meant to inspire ideas and should not be taken as prescriptive advice. Any implementation of the techniques described in this tutorial as part of your application should be thoroughly validated and evaluated to ensure accuracy, validity, compatibility with your specific use case and technical environment.
 
 ## Steps
