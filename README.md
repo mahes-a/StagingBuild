@@ -50,7 +50,7 @@ The High level flow  involves the following steps:
 
 
 - Microsoft Fabric You can enable free trial [here](https://learn.microsoft.com/en-us/fabric/get-started/fabric-trial).
-- Access to SQL Server and SQL Databases (Azure based)
+- Access to Azure Family of  SQL Databases
 
 
 ## Things to Note 
