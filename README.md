@@ -6,7 +6,7 @@ Benefits of a Generic Pipeline:
 
 -  Enhanced Efficiency: By capturing and processing only the changes made to the data, the pipeline reduces processing time and resource consumption, resulting in faster data loading and improved performance.
 
-- Real-time Data Availability: Change tracking, CDC, and watermark change capture mechanisms ensure that the most recent data is readily available for analysis and decision-making, empowering organizations to make timely and informed choices.
+- Near Real-time Data Availability: Change tracking, CDC, and watermark change capture mechanisms ensure that the most recent data is readily available for analysis and decision-making, empowering organizations to make timely and informed choices.
   
 - Incremental Data Loading: The pipeline processes only the newly added or modified data, eliminating the need to reload the entire dataset. This reduces processing time and minimizes the impact on system resources.
   
